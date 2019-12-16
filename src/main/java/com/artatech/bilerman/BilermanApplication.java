@@ -1,29 +1,29 @@
 package com.artatech.bilerman;
 
-import com.artatech.bilerman.Entities.Post;
-import com.artatech.bilerman.Repositories.PostRepository;
+import com.artatech.bilerman.Repositories.ArticleRepository;
+import com.artatech.bilerman.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+
+import javax.annotation.PostConstruct;
+import java.util.TimeZone;
 
 @SpringBootApplication
 public class BilermanApplication {
 
 	@Autowired
-	private PostRepository postRepository;
+	private ArticleRepository articleRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@PostConstruct
+	void init() {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(BilermanApplication.class, args);
-	}
-
-	@Bean
-	CommandLineRunner runner() {
-		return args -> {
-//            Save demo data after start
-			postRepository.save(new Post("Post", "USD", "first post body"));
-			postRepository.save(new Post("Euro", "EUR", "body"));
-		};
 	}
 }

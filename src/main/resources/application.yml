@@ -1,7 +1,55 @@
+server:
+  port: 8080
+
+app:
+  jwtSecret: bilermanJWTSecretKey
+  jwtExpirationInMs: 604800000
+
 spring:
+  application:
+    name: bilerman
   jpa:
     show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: bilerman
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/
+    username: postgres
+    password: root
   h2:
     console:
-      enabled: true
+      enabled: false
       path: /h2-console
+  jakson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+    time-zone: UTC
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 15MB
+
+
+flyway:
+  url: jdbc:postgresql://localhost:5432/
+  schemas: bilerman
+  defaultSchema: bilerman
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+
+file:
+  upload-dir: /Users/talguulu/Personal/Projects/Temp/bilerman-files
