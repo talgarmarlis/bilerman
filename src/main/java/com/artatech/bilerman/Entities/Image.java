@@ -1,6 +1,6 @@
 package com.artatech.bilerman.Entities;
 
-import com.artatech.bilerman.Models.Audit.CreateDateAudit;
+import com.artatech.bilerman.AccountManager.Models.Audit.CreateDateAudit;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 public class Image extends CreateDateAudit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id")
     private Integer id;
 

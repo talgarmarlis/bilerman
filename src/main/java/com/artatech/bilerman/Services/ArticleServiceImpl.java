@@ -42,8 +42,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void save(Article article) {
-
+    public Article save(Article article) {
+        return articleRepository.save(article);
     }
 
     @Override

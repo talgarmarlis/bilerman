@@ -5,6 +5,7 @@ app:
   jwtSecret: bilermanJWTSecretKey
   jwtExpirationInMs: 604800000
 
+
 spring:
   application:
     name: bilerman
@@ -22,7 +23,7 @@ spring:
       ddl-auto: none
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/
+    url: jdbc:postgresql://localhost:5432/development
     username: postgres
     password: root
   h2:
@@ -38,6 +39,24 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 15MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: bilermaninc@gmail.com
+    password: bilerman2020
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 8000
+          writetimeout: 8000
+          connectiontimeout: 8000
+          starttls:
+            enable: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+
 
 
 flyway:

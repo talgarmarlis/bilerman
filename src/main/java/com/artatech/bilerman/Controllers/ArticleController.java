@@ -24,6 +24,10 @@ public class ArticleController {
         return articleService.findById(id).orElse(null);
     }
 
+    @PostMapping()
+    public Article createArticle(@RequestBody Article article){
+        return articleService.save(article);
+    }
 
     @PostMapping("/{id}/image")
     public Integer updateImage(@RequestParam("file") MultipartFile file, @PathVariable("id") Integer id){

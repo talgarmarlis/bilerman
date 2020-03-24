@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS bilerman.user
 	name VARCHAR(50) NOT NULL,
 	surname VARCHAR(50) NOT NULL,
 	avatar VARCHAR(100),
+	enabled BOOLEAN NOT NULL DEFAULT FALSE,
 	created_at TIMESTAMPTZ NOT NULL,
 	updated_at TIMESTAMPTZ NOT NULL
 );
@@ -31,3 +32,26 @@ CREATE TABLE IF NOT EXISTS bilerman.user_role
 
 INSERT INTO bilerman.role(role_id, name) VALUES(DEFAULT, 'ROLE_USER'), (DEFAULT, 'ROLE_ADMIN');
 
+CREATE TABLE IF NOT EXISTS bilerman.verification_token
+(
+    token_id SERIAL NOT NULL
+        CONSTRAINT verification_token_token_id_pk
+			PRIMARY KEY,
+	token VARCHAR NOT NULL UNIQUE,
+	user_id INTEGER NOT NULL REFERENCES bilerman.user(user_id) ON DELETE CASCADE,
+	expiration_date TIMESTAMPTZ NOT NULL,
+	created_at TIMESTAMPTZ NOT NULL,
+	updated_at TIMESTAMPTZ NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS bilerman.password_reset_token
+(
+    token_id SERIAL NOT NULL
+        CONSTRAINT password_reset_token_token_id_pk
+			PRIMARY KEY,
+	token VARCHAR NOT NULL UNIQUE,
+	user_id INTEGER NOT NULL REFERENCES bilerman.user(user_id) ON DELETE CASCADE,
+	expiration_date TIMESTAMPTZ NOT NULL,
+	created_at TIMESTAMPTZ NOT NULL,
+	updated_at TIMESTAMPTZ NOT NULL
+);

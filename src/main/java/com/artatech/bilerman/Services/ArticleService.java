@@ -18,7 +18,7 @@ public interface ArticleService {
 
     List<Article> findByIdIn(List<Integer> articleIds);
 
-    void save(Article article);
+    Article save(Article article);
 
     void delete(Article article);
 

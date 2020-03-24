@@ -1,0 +1,5 @@
+register:
+  success: You are successfully registered
+  token:
+    expired: Your link has been expired
+    invalid: Invalid confirmation link

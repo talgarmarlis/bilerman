@@ -1,6 +1,6 @@
 package com.artatech.bilerman.Configuration;
 
-import com.artatech.bilerman.Security.UserPrincipal;
+import com.artatech.bilerman.AccountManager.Security.UserPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -15,15 +15,15 @@ import java.util.Optional;
 @EnableJpaAuditing
 public class AuditingConfiguration {
     @Bean
-    public AuditorAware<Integer> auditorProvider() {
+    public AuditorAware<Long> auditorProvider() {
         return new SpringSecurityAuditAwareImpl();
     }
 }
 
-class SpringSecurityAuditAwareImpl implements AuditorAware<Integer> {
+class SpringSecurityAuditAwareImpl implements AuditorAware<Long> {
 
     @Override
-    public Optional<Integer> getCurrentAuditor() {
+    public Optional<Long> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null ||

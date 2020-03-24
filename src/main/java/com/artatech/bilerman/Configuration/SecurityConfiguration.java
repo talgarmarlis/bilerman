@@ -1,8 +1,8 @@
 package com.artatech.bilerman.Configuration;
 
-import com.artatech.bilerman.Security.CustomUserDetailsService;
-import com.artatech.bilerman.Security.JwtAuthenticationEntryPoint;
-import com.artatech.bilerman.Security.JwtAuthenticationFilter;
+import com.artatech.bilerman.AccountManager.Security.CustomUserDetailsService;
+import com.artatech.bilerman.AccountManager.Security.JwtAuthenticationEntryPoint;
+import com.artatech.bilerman.AccountManager.Security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

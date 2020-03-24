@@ -1,6 +1,6 @@
 package com.artatech.bilerman.Entities;
 
-import com.artatech.bilerman.Models.Audit.UserDateAudit;
+import com.artatech.bilerman.AccountManager.Models.Audit.UserDateAudit;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 public class Article extends UserDateAudit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
     private Integer id;
 
