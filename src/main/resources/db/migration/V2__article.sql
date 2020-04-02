@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS bilerman.article
 	subtitle VARCHAR(500),
 	description VARCHAR(500),
 	body TEXT,
+	published BOOLEAN NOT NULL DEFAULT FALSE,
+	views INTEGER NOT NULL DEFAULT 0,
 	image_id INTEGER,
 	created_at TIMESTAMPTZ NOT NULL,
 	updated_at TIMESTAMPTZ NOT NULL,
@@ -20,7 +22,7 @@ CREATE TABLE IF NOT EXISTS bilerman.image
 		CONSTRAINT image_image_id_pk
 			PRIMARY KEY,
 	name VARCHAR(50) NOT NULL,
-	article_id INTEGER NOT NULL REFERENCES bilerman.article(article_id),
+	article_id INTEGER NOT NULL REFERENCES bilerman.article(article_id) ON DELETE CASCADE,
 	created_at TIMESTAMPTZ NOT NULL
 );
 

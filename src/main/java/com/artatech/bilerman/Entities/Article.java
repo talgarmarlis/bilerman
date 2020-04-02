@@ -4,6 +4,7 @@ import com.artatech.bilerman.AccountManager.Models.Audit.UserDateAudit;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 
 @Entity
@@ -11,8 +12,8 @@ public class Article extends UserDateAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "article_id")
-    private Integer id;
+    @Column(name = "article_id", nullable = false, updatable = false)
+    private Long id;
 
     @Size(max = 500)
     private String title;
@@ -23,25 +24,28 @@ public class Article extends UserDateAudit {
     @Size(max = 500)
     private String description;
 
+    @Column(name = "image_id")
+    private Long imageId;
+
+    private Boolean published = false;
+
+    private Integer views = 0;
+
     private String body;
 
-    @Column(name = "image_id")
-    private Integer imageId;
+    public Article() {}
 
-    Article() {}
-
-    public Article(String title, String subtitle, String description, String body){
+    public Article(String title, String subtitle, String description){
         this.title = title;
         this.subtitle = subtitle;
         this.description = description;
-        this.body = body;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -69,19 +73,35 @@ public class Article extends UserDateAudit {
         this.description = description;
     }
 
+    public Long getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(Long imageId) {
+        this.imageId = imageId;
+    }
+
+    public Boolean getPublished() {
+        return published;
+    }
+
+    public void setPublished(Boolean published) {
+        this.published = published;
+    }
+
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
+    }
+
     public String getBody() {
         return body;
     }
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public Integer getImageId() {
-        return imageId;
-    }
-
-    public void setImageId(Integer imageId) {
-        this.imageId = imageId;
     }
 }

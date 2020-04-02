@@ -15,25 +15,25 @@ import javax.persistence.MappedSuperclass;
 public abstract class UserDateAudit extends DateAudit {
     @CreatedBy
     @Column(nullable = false, updatable = false)
-    private Integer createdBy;
+    private Long createdBy;
 
     @LastModifiedBy
     @Column(nullable = false)
-    private Integer updatedBy;
+    private Long updatedBy;
 
-    public Integer getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(Integer createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
-    public Integer getUpdatedBy() {
+    public Long getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(Integer updatedBy) {
+    public void setUpdatedBy(Long updatedBy) {
         this.updatedBy = updatedBy;
     }
 }

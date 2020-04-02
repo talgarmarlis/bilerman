@@ -14,15 +14,21 @@ public interface ArticleService {
 
     Collection<Article> findAll();
 
-    Optional<Article> findById(Integer articleId);
+    Optional<Article> findById(Long articleId);
 
-    List<Article> findByIdIn(List<Integer> articleIds);
+    List<Article> findByIdIn(List<Long> articleIds);
 
     Article save(Article article);
 
     void delete(Article article);
 
-    Integer uploadImage(MultipartFile file, Integer articleId);
+    void delete(Long id);
 
-    Resource downloadImage(Integer articleId, Integer imageId);
+    Long uploadImage(MultipartFile file, Long articleId);
+
+    Resource downloadImage(Long articleId, Long imageId);
+
+    void delete(Long articleId, Long imageId);
+
+    Collection<Article> fingAllByUser(Long userId, Boolean published);
 }

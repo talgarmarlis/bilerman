@@ -13,7 +13,7 @@ public class Image extends CreateDateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id")
-    private Integer id;
+    private Long id;
 
     @NotBlank
     @Size(max = 50)
@@ -21,15 +21,15 @@ public class Image extends CreateDateAudit {
 
     @NotNull
     @Column(name = "article_id")
-    private Integer articleId;
+    private Long articleId;
 
     public Image(){}
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,11 +41,11 @@ public class Image extends CreateDateAudit {
         this.name = name;
     }
 
-    public Integer getArticleId() {
+    public Long getArticleId() {
         return articleId;
     }
 
-    public void setArticleId(Integer articleId) {
+    public void setArticleId(Long articleId) {
         this.articleId = articleId;
     }
 }

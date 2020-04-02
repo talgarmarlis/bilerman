@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class StorageService {
@@ -27,7 +28,7 @@ public class StorageService {
     private String dir;
 
     public String store(MultipartFile file, String location) {
-        String fileName = getUniqueFileName();
+        String fileName = UUID.randomUUID().toString() + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
         try {
             // Copy file to the target location (Replacing existing file with the same name)
             Path filePath = getPath(location).resolve(fileName);
@@ -70,9 +71,5 @@ public class StorageService {
         }
 
         return path;
-    }
-
-    private String getUniqueFileName() {
-        return "filename";
     }
 }

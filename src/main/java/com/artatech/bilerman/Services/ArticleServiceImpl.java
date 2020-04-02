@@ -1,7 +1,6 @@
 package com.artatech.bilerman.Services;
 
 import com.artatech.bilerman.Entities.Article;
-import com.artatech.bilerman.Entities.Image;
 import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
 import com.artatech.bilerman.Repositories.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,18 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     ArticleRepository articleRepository;
-
-    @Autowired
-    StorageService storageService;
 
     @Autowired
     ImageService imageService;
@@ -32,12 +26,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Optional<Article> findById(Integer articleId) {
+    public Optional<Article> findById(Long articleId) {
         return articleRepository.findById(articleId);
     }
 
     @Override
-    public List<Article> findByIdIn(List<Integer> articleIds) {
+    public List<Article> findByIdIn(List<Long> articleIds) {
         return articleRepository.findAllById(articleIds);
     }
 
@@ -52,25 +46,29 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Integer uploadImage(MultipartFile file, Integer articleId) {
-        Article article = findById(articleId).orElseThrow(() -> new ResourceNotFoundException("Article", "id", articleId));
-        Image image = new Image();
-        image.setArticleId(articleId);
-        image.setName("default.png");
-        image = imageService.save(image);
-
-        String fileName =  storageService.store(file, getImageLocation(image.getCreatedAt()));
-        image.setName(fileName);
-        image = imageService.save(image);
-        return image.getId();
-
-
+    public void delete(Long id) {
+        articleRepository.deleteById(id);
     }
 
     @Override
-    public Resource downloadImage(Integer articleId, Integer imageId) {
-        Image image = imageService.findById(imageId).orElseThrow(() -> new ResourceNotFoundException("Image", "id", imageId));
-        return storageService.load(image.getName(), getImageLocation(image.getCreatedAt()));
+    public Long uploadImage(MultipartFile file, Long articleId) {
+        Article article = findById(articleId).orElseThrow(() -> new ResourceNotFoundException("Article", "id", articleId));
+        return imageService.upload(file, articleId);
+    }
+
+    @Override
+    public Resource downloadImage(Long articleId, Long imageId) {
+        return imageService.download(imageId);
+    }
+
+    @Override
+    public void delete(Long articleId, Long imageId) {
+        imageService.delete(imageId);
+    }
+
+    @Override
+    public Collection<Article> fingAllByUser(Long userId, Boolean published) {
+        return articleRepository.findAllByCreatedByAndPublished(userId, published);
     }
 
     private String getImageLocation(Instant instant){
