@@ -1,3 +1,4 @@
+CREATE SCHEMA IF NOT EXISTS bilerman;
 CREATE TABLE IF NOT EXISTS bilerman.user
 (
     user_id SERIAL NOT NULL

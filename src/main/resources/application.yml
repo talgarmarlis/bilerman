@@ -23,7 +23,7 @@ spring:
       ddl-auto: none
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/development
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: root
   h2:
