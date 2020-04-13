@@ -1,14 +1,16 @@
 package com.artatech.bilerman.Entities;
 
-import com.artatech.bilerman.AccountManager.Models.Audit.UserDateAudit;
+import com.artatech.bilerman.AccountManager.Models.Audit.CreateAudit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Set;
 
 
 @Entity
-public class Article extends UserDateAudit {
+public class Article extends CreateAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,24 +23,28 @@ public class Article extends UserDateAudit {
     @Size(max = 500)
     private String subtitle;
 
-    @Size(max = 500)
-    private String description;
-
     @Column(name = "image_id")
     private Long imageId;
 
-    private Boolean published = false;
-
-    private Integer views = 0;
+    private Integer views;
 
     private String body;
 
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "draft_id", nullable = false)
+    private Draft draft;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "article_tag", joinColumns = { @JoinColumn(name = "article_id") }, inverseJoinColumns = { @JoinColumn(name = "tag_id") })
+    private Set<Tag> tags = new HashSet<>();
+
     public Article() {}
 
-    public Article(String title, String subtitle, String description){
+    public Article(String title, String subtitle, String body) {
         this.title = title;
         this.subtitle = subtitle;
-        this.description = description;
+        this.body = body;
     }
 
     public Long getId() {
@@ -65,28 +71,12 @@ public class Article extends UserDateAudit {
         this.subtitle = subtitle;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Long getImageId() {
         return imageId;
     }
 
     public void setImageId(Long imageId) {
         this.imageId = imageId;
-    }
-
-    public Boolean getPublished() {
-        return published;
-    }
-
-    public void setPublished(Boolean published) {
-        this.published = published;
     }
 
     public Integer getViews() {
@@ -103,5 +93,21 @@ public class Article extends UserDateAudit {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public Draft getDraft() {
+        return draft;
+    }
+
+    public void setDraft(Draft draft) {
+        this.draft = draft;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 }

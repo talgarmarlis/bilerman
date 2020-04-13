@@ -26,8 +26,8 @@ public class ImageServiceImpl implements ImageService{
     }
 
     @Override
-    public Optional<Image> findById(Long id) {
-        return imageRepository.findById(id);
+    public Image findById(Long id) {
+        return imageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Image", "id", id));
     }
 
     @Override
@@ -42,22 +42,21 @@ public class ImageServiceImpl implements ImageService{
 
     @Override
     public void delete(Image image) {
+        storageService.delete(image.getName(), getImageLocation(image.getCreatedAt()));
         imageRepository.delete(image);
     }
 
     @Override
     public void delete(Long imageId) {
-        delete(findById(imageId).orElseThrow(() -> new ResourceNotFoundException("Image", "id", imageId)));
+        delete(findById(imageId));
     }
 
     @Override
-    public Long upload(MultipartFile file, Long articleId) {
+    public Long upload(MultipartFile file) {
         Image image = new Image();
-        image.setArticleId(articleId);
-        image.setName("default.png");
+        image.setName("default");
         image = save(image);
-
-        String fileName =  storageService.store(file, getImageLocation());
+        String fileName =  storageService.store(file, getImageLocation(image.getCreatedAt()));
         image.setName(fileName);
         image = save(image);
         return image.getId();
@@ -65,14 +64,14 @@ public class ImageServiceImpl implements ImageService{
 
     @Override
     public Resource download(Long imageId) {
-        Image image = findById(imageId).orElseThrow(() -> new ResourceNotFoundException("Image", "id", imageId));
-        return storageService.load(image.getName(), getImageLocation());
+        Image image = findById(imageId);
+        return storageService.load(image.getName(), getImageLocation(image.getCreatedAt()));
     }
 
-    private String getImageLocation(){
+    private String getImageLocation(Instant createdAt){
         String result = "";
         Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
+        cal.setTime(Date.from(createdAt));
         result += "/" + cal.get(Calendar.YEAR);
         result += "/" + cal.get(Calendar.MONTH);
         result += "/" + cal.get(Calendar.DAY_OF_MONTH);

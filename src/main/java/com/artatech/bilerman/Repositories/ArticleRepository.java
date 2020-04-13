@@ -8,7 +8,7 @@ import java.util.Collection;
 
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
-    Collection<Article> findAllByCreatedByAndPublished(Long userId, Boolean published);
+    Collection<Article> findAllByCreatedBy(Long userId);
 
     void deleteById(Long id);
 }

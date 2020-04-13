@@ -19,10 +19,6 @@ public class Image extends CreateDateAudit {
     @Size(max = 50)
     private String name;
 
-    @NotNull
-    @Column(name = "article_id")
-    private Long articleId;
-
     public Image(){}
 
     public Long getId() {
@@ -39,13 +35,5 @@ public class Image extends CreateDateAudit {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getArticleId() {
-        return articleId;
-    }
-
-    public void setArticleId(Long articleId) {
-        this.articleId = articleId;
     }
 }

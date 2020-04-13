@@ -1,6 +1,7 @@
 package com.artatech.bilerman.Services;
 
 import com.artatech.bilerman.Entities.Article;
+import com.artatech.bilerman.Models.PublicationModel;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,11 +25,7 @@ public interface ArticleService {
 
     void delete(Long id);
 
-    Long uploadImage(MultipartFile file, Long articleId);
+    Collection<Article> fingAllByUser(Long userId);
 
-    Resource downloadImage(Long articleId, Long imageId);
-
-    void delete(Long articleId, Long imageId);
-
-    Collection<Article> fingAllByUser(Long userId, Boolean published);
+    Article publishDraft(PublicationModel model);
 }

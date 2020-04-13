@@ -14,7 +14,7 @@ public interface ImageService {
 
     Collection<Image> findAll();
 
-    Optional<Image> findById(Long id);
+    Image findById(Long id);
 
     List<Image> findByIdIn(List<Long> imageIds);
 
@@ -24,7 +24,7 @@ public interface ImageService {
 
     void delete(Long imageId);
 
-    Long upload(MultipartFile file, Long articleId);
+    Long upload(MultipartFile file);
 
     Resource download(Long imageId);
 }
