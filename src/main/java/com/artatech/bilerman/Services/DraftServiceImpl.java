@@ -43,10 +43,11 @@ public class DraftServiceImpl implements DraftService {
         if(draft.getId() != null) {
             Draft oldDraft = findById(draft.getId());
             if(oldDraft.getImageId() != null && oldDraft.getImageId() != draft.getImageId()){
-                if(!oldDraft.getPublished() ||
-                        (oldDraft.getArticle().getImageId() != null &&
-                                oldDraft.getArticle().getImageId() != oldDraft.getImageId()));
+                if(!oldDraft.getPublished()) deleteImageId = oldDraft.getImageId();
+                else if(oldDraft.getArticle().getImageId() != null &&
+                        oldDraft.getArticle().getImageId() != oldDraft.getImageId()){
                     deleteImageId = oldDraft.getImageId();
+                }
             }
         }
         Draft saved;

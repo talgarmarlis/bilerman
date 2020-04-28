@@ -57,8 +57,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", "id", id));
     }
 
     @Override
@@ -100,8 +100,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateAvatar(MultipartFile file, Long userId) {
-        User user = findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-
+        User user = findById(userId);
         if(user.getAvatar() != null) storageService.delete(user.getAvatar(), AVATAR_PATH);
         String fileName = storageService.store(file, AVATAR_PATH);
         user.setAvatar(fileName);
@@ -110,7 +109,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Resource getAvatar(Long userId) {
-        User user = findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        User user = findById(userId);
         if(user.getAvatar() == null) return storageService.load("default.png", AVATAR_PATH);
 
         return storageService.load(user.getAvatar(), AVATAR_PATH);

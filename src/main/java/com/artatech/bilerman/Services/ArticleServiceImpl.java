@@ -67,6 +67,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article publishDraft(PublicationModel model) {
+        Long deleteImageId = null;
         Draft draft = draftService.findById(model.getDraftId());
         Article article;
         if(draft.getArticle() != null) {
@@ -74,6 +75,7 @@ public class ArticleServiceImpl implements ArticleService {
             article.setTitle(model.getTitle());
             article.setSubtitle(model.getSubtitle());
             article.setBody(draft.getBody());
+            if(article.getImageId() != draft.getImageId()) deleteImageId = article.getImageId();
             article.setImageId(draft.getImageId());
         }
         else  {
@@ -97,6 +99,7 @@ public class ArticleServiceImpl implements ArticleService {
         Article saved = save(article);
         draft.setPublished(true);
         draftService.save(draft);
+        if(deleteImageId != null) imageService.delete(deleteImageId);
         return saved;
     }
 }

@@ -90,8 +90,7 @@ public class AuthenticationController {
 
     @PostMapping("/sendRegistrationToken/{userId}")
     public void resendRegistrationToken(@PathVariable("userId") Long userId, WebRequest request) {
-        User user = userService.findById(userId).orElse(null);
-        if(user == null) throw new ResourceNotFoundException("User", "id", userId);
+        User user = userService.findById(userId);
         authenticationService.sendEmailVerificationEmail(user, request.getLocale());
     }
 

@@ -72,12 +72,15 @@ public class AuthenticationService {
             String token = UUID.randomUUID().toString();
             service.createVerificationToken(user, token);
 
-            String confirmationUrl = APPLICATION_URL + "/email-confirmation?token=" + token;
-            File input = new File(getClass().getClassLoader().getResource("templates/confirmation_email.html").getFile());
+            String confirmationUrl = APPLICATION_URL + "/user/confirm?token=" + token;
+            File input = new File(getClass().getClassLoader().getResource("templates/email_template.html").getFile());
             Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
             String html = doc.html();
             html = html.replace("{{name}}", user.getName());
-            html = html.replace("{{confirmation_link}}", confirmationUrl);
+            html = html.replace("{{top}}", "We're excited to have you get started. First, you need to confirm your account. Just press the button below.");
+            html = html.replace("{{bottom}}", "If you did not register to our site, you can safely ignore this email.");
+            html = html.replace("{{button_name}}", "Activate");
+            html = html.replace("{{action_url}}", confirmationUrl);
             String message = html;
 
             MimeMessagePreparator messagePreparator = mimeMessage -> {
@@ -98,12 +101,15 @@ public class AuthenticationService {
             String token = UUID.randomUUID().toString();
             service.createPasswordResetToken(user, token);
 
-            String resetURL = APPLICATION_URL + "/password-reset?token=" + token;
-            File input = new File(getClass().getClassLoader().getResource("templates/password_reset_email.html").getFile());
+            String resetURL = APPLICATION_URL + "/user/password/reset?token=" + token;
+            File input = new File(getClass().getClassLoader().getResource("templates/email_template.html").getFile());
             Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
             String html = doc.html();
             html = html.replace("{{name}}", user.getName());
-            html = html.replace("{{reset_link}}", resetURL);
+            html = html.replace("{{top}}", "Seems like you forgot your password for Bilerman. If this is true, click below to reset your password.");
+            html = html.replace("{{bottom}}", "If you did not forgot your password you can safely ignore this email.");
+            html = html.replace("{{button_name}}", "Reset password");
+            html = html.replace("{{action_url}}", resetURL);
             String message = html;
 
             MimeMessagePreparator messagePreparator = mimeMessage -> {

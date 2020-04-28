@@ -24,23 +24,23 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable("id") Long id){
-        return userService.findById(id).orElse(null);
+        return userService.findById(id);
     }
 
-    @GetMapping("/{email}")
-    public User getUserByEmail(@PathVariable("email") String email){
-        return userService.findByEmail(email);
-    }
+//    @GetMapping("/{email}")
+//    public User getUserByEmail(@PathVariable("email") String email){
+//        return userService.findByEmail(email);
+//    }
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('USER')")
     public User getCurrentUser(@CurrentUser UserPrincipal currentUser){
-        return userService.findById(currentUser.getId()).orElse(null);
+        return userService.findById(currentUser.getId());
     }
 
     @GetMapping("/profile/{id}")
     public User getUserProfileById(@PathVariable("id") Long id){
-        return userService.findById(id).orElse(null);
+        return userService.findById(id);
     }
 
     @GetMapping("/profile/{email}")
