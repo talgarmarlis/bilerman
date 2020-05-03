@@ -25,11 +25,17 @@ public interface UserService {
 
     User save(User user);
 
+    User update(User user);
+
     void delete(Long userId);
 
     User updateAvatar(MultipartFile file, Long userId);
 
     Resource getAvatar(Long userId);
+
+    User updateCover(MultipartFile file, Long userId);
+
+    Resource getCover(Long userId);
 
     void createVerificationToken(User user, String token);
 

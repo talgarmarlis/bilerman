@@ -12,20 +12,18 @@ import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
 import com.artatech.bilerman.AccountManager.Repositories.RoleRepository;
 import com.artatech.bilerman.AccountManager.Repositories.UserRepository;
 import com.artatech.bilerman.Services.StorageService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
-
-    private final String AVATAR_PATH = "/avatar";
 
     UserRepository userRepository;
 
@@ -94,6 +92,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User update(User user) {
+        User saved = findById(user.getId());
+        BeanUtils.copyProperties(user, saved, "id", "email", "password", "avatar", "cover");
+        return save(saved);
+    }
+
+    @Override
     public void delete(Long userId) {
         userRepository.deleteById(userId);
     }
@@ -101,8 +106,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateAvatar(MultipartFile file, Long userId) {
         User user = findById(userId);
-        if(user.getAvatar() != null) storageService.delete(user.getAvatar(), AVATAR_PATH);
-        String fileName = storageService.store(file, AVATAR_PATH);
+        if(user.getAvatar() != null) storageService.delete(user.getAvatar(), getImageLocation(user.getCreatedAt(), "avatar"));
+        String fileName = storageService.store(file, getImageLocation(user.getCreatedAt(), "avatar"));
         user.setAvatar(fileName);
         return save(user);
     }
@@ -110,9 +115,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public Resource getAvatar(Long userId) {
         User user = findById(userId);
-        if(user.getAvatar() == null) return storageService.load("default.png", AVATAR_PATH);
+        if(user.getAvatar() == null) return storageService.load("default.png", "/avatar");
+        return storageService.load(user.getAvatar(), getImageLocation(user.getCreatedAt(), "avatar"));
+    }
 
-        return storageService.load(user.getAvatar(), AVATAR_PATH);
+    @Override
+    public User updateCover(MultipartFile file, Long userId) {
+        User user = findById(userId);
+        if(user.getCover() != null) storageService.delete(user.getCover(), getImageLocation(user.getCreatedAt(), "cover"));
+        String fileName = storageService.store(file, getImageLocation(user.getCreatedAt(), "cover"));
+        user.setCover(fileName);
+        return save(user);
+    }
+
+    @Override
+    public Resource getCover(Long userId) {
+        User user = findById(userId);
+        if(user.getCover() == null) return storageService.load("default.png", "/cover");
+        return storageService.load(user.getCover(), getImageLocation(user.getCreatedAt(), "cover"));
     }
 
     @Override
@@ -148,5 +168,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow();
         user.setPassword(passwordEncoder.encode(password));
         save(user);
+    }
+
+    private String getImageLocation(Instant createdAt, String type) {
+        String result = "/" + type;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(Date.from(createdAt));
+        result += "/" + cal.get(Calendar.YEAR);
+        result += "/" + cal.get(Calendar.MONTH);
+        return result;
     }
 }

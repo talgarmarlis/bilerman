@@ -36,8 +36,17 @@ public class User extends DateAudit {
     @Size(max = 50)
     private String surname;
 
+    @Size(max = 1000)
+    private String bio;
+
+    @Size(max = 250)
+    private String mind;
+
     @Size(max = 100)
     private String avatar;
+
+    @Size(max = 100)
+    private String cover;
 
     private boolean enabled;
 
@@ -95,12 +104,36 @@ public class User extends DateAudit {
         this.surname = surname;
     }
 
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getMind() {
+        return mind;
+    }
+
+    public void setMind(String mind) {
+        this.mind = mind;
+    }
+
     public String getAvatar() {
         return avatar;
     }
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
     public boolean isEnabled() {

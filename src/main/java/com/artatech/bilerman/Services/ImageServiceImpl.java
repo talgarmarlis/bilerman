@@ -69,7 +69,7 @@ public class ImageServiceImpl implements ImageService{
     }
 
     private String getImageLocation(Instant createdAt){
-        String result = "";
+        String result = "/article";
         Calendar cal = Calendar.getInstance();
         cal.setTime(Date.from(createdAt));
         result += "/" + cal.get(Calendar.YEAR);
