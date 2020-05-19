@@ -110,7 +110,7 @@ public class AuthenticationService {
             String html = doc.html();
             html = html.replace("{{name}}", user.getName());
             html = html.replace("{{top}}", "Seems like you forgot your password for Bilerman. If this is true, click below to reset your password.");
-            html = html.replace("{{bottom}}", "If you did not forgot your password you can safely ignore this email.");
+            html = html.replace("{{bottom}}", "If it was not you, you can safely ignore this email.");
             html = html.replace("{{button_name}}", "Reset password");
             html = html.replace("{{action_url}}", resetURL);
             String message = html;
