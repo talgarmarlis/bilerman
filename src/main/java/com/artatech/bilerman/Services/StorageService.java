@@ -24,7 +24,7 @@ import java.util.UUID;
 @Service
 public class StorageService {
 
-    @Value("${file.upload-dir}")
+    @Value("${app.file.upload-dir}")
     private String dir;
 
     public String store(MultipartFile file, String location) {

@@ -31,7 +31,7 @@ public class AuthenticationService {
     static final String SIGNING_KEY = "bilerman_singing_key";
     static final String BEARER_PREFIX = "Bearer";
 
-    @Value("${spring.application.url}")
+    @Value("${app.url}")
     static String APPLICATION_URL;
 
     @Autowired
