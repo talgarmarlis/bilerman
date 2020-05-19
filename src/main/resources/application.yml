@@ -55,6 +55,8 @@ logging:
 
 spring:
   profiles: dev
+  application:
+    url: http://localhost:3000
   datasource:
     platform: postgres
     url: jdbc:postgresql://localhost:5432/postgres
@@ -76,6 +78,7 @@ server:
 
 spring:
   profiles: prod
+    url: http://bilerman.s3-website.eu-central-1.amazonaws.com
   datasource:
     platform: postgres
     url: jdbc:postgresql://bilerman-prod.cbyiljxj7wrz.eu-central-1.rds.amazonaws.com:5432/postgres

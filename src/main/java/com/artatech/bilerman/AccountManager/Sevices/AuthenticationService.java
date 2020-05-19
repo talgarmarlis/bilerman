@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -29,7 +30,9 @@ public class AuthenticationService {
     static final Long EXPIRATION_TIME = 864_000_00L;
     static final String SIGNING_KEY = "bilerman_singing_key";
     static final String BEARER_PREFIX = "Bearer";
-    static final String APPLICATION_URL = "http://localhost:3000";
+
+    @Value("${spring.application.url}")
+    static String APPLICATION_URL;
 
     @Autowired
     private UserService service;
