@@ -1,10 +1,6 @@
-server:
-  port: 8080
-
 app:
   jwtSecret: bilermanJWTSecretKey
   jwtExpirationInMs: 604800000
-
 
 spring:
   application:
@@ -73,6 +69,9 @@ spring:
 file:
   upload-dir: /Users/talguulu/Personal/Projects/Temp/bilerman-files
 
+server:
+  port: 8080
+
 ---
 
 spring:
@@ -90,3 +89,6 @@ spring:
 
 file:
   upload-dir: C:/Users/Administrator/Desktop/bilerman-files
+
+server:
+  port: 80
