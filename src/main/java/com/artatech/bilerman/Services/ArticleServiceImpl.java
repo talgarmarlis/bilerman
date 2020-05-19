@@ -4,14 +4,14 @@ import com.artatech.bilerman.Entities.Article;
 import com.artatech.bilerman.Entities.Draft;
 import com.artatech.bilerman.Entities.Tag;
 import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
+import com.artatech.bilerman.Models.ArticleDetails;
+import com.artatech.bilerman.Models.ArticleModel;
 import com.artatech.bilerman.Models.PublicationModel;
 import com.artatech.bilerman.Repositories.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -35,8 +35,30 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Optional<Article> findById(Long articleId) {
-        return articleRepository.findById(articleId);
+    public Page<ArticleModel> findByPage(Long userId, String title, String orderBy, String direction, Integer page, Integer size) {
+        Page<Article> pagedArticles = findArticlesByPage(userId, title, orderBy, direction, page, size);
+        Page<ArticleModel> pagedResult = pagedArticles.map(article -> {return new ArticleModel(article);});
+        return pagedResult;
+    }
+
+    private Page<Article> findArticlesByPage(Long userId, String title, String orderBy, String direction, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, direction.equals("DESC") ? Sort.by(orderBy).descending() : Sort.by(orderBy));
+        if(userId == null && title == null) return articleRepository.findAll(pageable);
+        else if(userId == null) return articleRepository.findAllByTitleContainingIgnoreCase(title, pageable);
+        else if(title == null) return articleRepository.findAllByCreatedBy(userId, pageable);
+        return articleRepository.findAllByCreatedByAndTitleContainingIgnoreCase(userId, title, pageable);
+    }
+
+    @Override
+    public Article findById(Long articleId) {
+        return articleRepository.findById(articleId).orElseThrow(() -> new ResourceNotFoundException("article", "id", articleId));
+    }
+
+    @Override
+    public ArticleDetails getArticleDetailsById(Long articleId) {
+        Article article =  findById(articleId);
+        article.setViews(article.getViews() + 1);
+        return new ArticleDetails(save(article));
     }
 
     @Override

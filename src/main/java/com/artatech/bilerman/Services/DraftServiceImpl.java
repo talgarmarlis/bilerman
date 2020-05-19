@@ -6,6 +6,10 @@ import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
 import com.artatech.bilerman.Repositories.DraftRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -27,13 +31,22 @@ public class DraftServiceImpl implements DraftService {
     }
 
     @Override
-    public Draft findById(Long draftId) {
-        return draftRepository.findById(draftId).orElseThrow(() -> new ResourceNotFoundException("'Draft'", "id", draftId));
+    public List<Draft> findByIdIn(List<Long> draftIds) {
+        return draftRepository.findAllById(draftIds);
     }
 
     @Override
-    public List<Draft> findByIdIn(List<Long> draftIds) {
-        return draftRepository.findAllById(draftIds);
+    public Page<Draft> findByPage(Long userId, Boolean published, String orderBy, String direction, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, direction.equals("DESC") ? Sort.by(orderBy).descending() : Sort.by(orderBy));
+        if(userId == null && published == null) return draftRepository.findAll(pageable);
+        else if(userId == null) return draftRepository.findAllByPublished(published, pageable);
+        else if(published == null) return draftRepository.findAllByCreatedBy(userId, pageable);
+        return draftRepository.findAllByCreatedByAndPublished(userId, published, pageable);
+    }
+
+    @Override
+    public Draft findById(Long draftId) {
+        return draftRepository.findById(draftId).orElseThrow(() -> new ResourceNotFoundException("'Draft'", "id", draftId));
     }
 
     @Override
@@ -70,15 +83,5 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public void delete(Long id) {
         draftRepository.delete(findById(id));
-    }
-
-    @Override
-    public Collection<Draft> fingAllByUser(Long userId) {
-        return draftRepository.findAllByCreatedBy(userId);
-    }
-
-    @Override
-    public Collection<Draft> fingAllByUser(Long userId, Boolean published) {
-        return draftRepository.findAllByCreatedByAndPublished(userId, published);
     }
 }

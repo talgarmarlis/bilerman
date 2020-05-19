@@ -1,5 +1,6 @@
 package com.artatech.bilerman.Entities;
 
+import com.artatech.bilerman.AccountManager.Entities.User;
 import com.artatech.bilerman.AccountManager.Models.Audit.CreateAudit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -38,6 +39,10 @@ public class Article extends CreateAudit {
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "article_tag", joinColumns = { @JoinColumn(name = "article_id") }, inverseJoinColumns = { @JoinColumn(name = "tag_id") })
     private Set<Tag> tags = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name="createdBy", nullable=false, insertable = false, updatable = false)
+    private User user;
 
     public Article() {}
 
@@ -109,5 +114,13 @@ public class Article extends CreateAudit {
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

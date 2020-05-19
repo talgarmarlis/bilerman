@@ -21,15 +21,6 @@ spring:
         order_updates: true
     hibernate:
       ddl-auto: none
-  datasource:
-    platform: postgres
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: root
-  h2:
-    console:
-      enabled: false
-      path: /h2-console
   jakson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
@@ -57,18 +48,45 @@ spring:
             port: 465
             class: javax.net.ssl.SSLSocketFactory
 
-
-
-flyway:
-  url: jdbc:postgresql://localhost:5432/
-  schemas: bilerman
-  defaultSchema: bilerman
-
 logging:
   level:
     org:
       hibernate:
         SQL: DEBUG
 
+
+---
+
+spring:
+  profiles: dev
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: root
+  flyway:
+    url: jdbc:postgresql://localhost:5432/
+    schemas: bilerman
+    user: postgres
+    password: root
+
 file:
   upload-dir: /Users/talguulu/Personal/Projects/Temp/bilerman-files
+
+---
+
+spring:
+  profiles: prod
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://bilerman-prod.cbyiljxj7wrz.eu-central-1.rds.amazonaws.com:5432/postgres
+    username: postgres
+    password: bilerman2020
+  flyway:
+    url: jdbc:postgresql://bilerman-prod.cbyiljxj7wrz.eu-central-1.rds.amazonaws.com:5432/
+    schemas: bilerman
+    user: postgres
+    password: bilerman2020
+
+file:
+  upload-dir: C:/Users/Administrator/Desktop/bilerman-files
