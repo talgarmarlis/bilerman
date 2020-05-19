@@ -32,7 +32,7 @@ public class AuthenticationService {
     static final String BEARER_PREFIX = "Bearer";
 
     @Value("${app.url}")
-    static String APPLICATION_URL;
+    private String APPLICATION_URL;
 
     @Autowired
     private UserService service;
