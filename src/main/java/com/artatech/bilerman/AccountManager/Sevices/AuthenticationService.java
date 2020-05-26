@@ -75,7 +75,7 @@ public class AuthenticationService {
             String token = UUID.randomUUID().toString();
             service.createVerificationToken(user, token);
 
-            String confirmationUrl = APPLICATION_URL + "/user/confirm?token=" + token;
+            String confirmationUrl = APPLICATION_URL + "/#/user/confirm?token=" + token;
             File input = new File(getClass().getClassLoader().getResource("templates/email_template.html").getFile());
             Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
             String html = doc.html();
@@ -104,7 +104,7 @@ public class AuthenticationService {
             String token = UUID.randomUUID().toString();
             service.createPasswordResetToken(user, token);
 
-            String resetURL = APPLICATION_URL + "/user/password/reset?token=" + token;
+            String resetURL = APPLICATION_URL + "/#/user/password/reset?token=" + token;
             File input = new File(getClass().getClassLoader().getResource("templates/email_template.html").getFile());
             Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
             String html = doc.html();
