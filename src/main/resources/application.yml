@@ -90,7 +90,7 @@ spring:
     password: bilerman2020
 
 app:
-  url: http://bilerman.s3-website.eu-central-1.amazonaws.com
+  url: http://bilerman.kg
   file:
     upload-dir: C:/Users/Administrator/Desktop/bilerman-files
 
