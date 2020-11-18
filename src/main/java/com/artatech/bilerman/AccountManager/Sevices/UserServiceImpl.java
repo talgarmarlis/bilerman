@@ -7,6 +7,9 @@ import com.artatech.bilerman.AccountManager.Entities.VerificationToken;
 import com.artatech.bilerman.AccountManager.Enums.RoleName;
 import com.artatech.bilerman.AccountManager.Repositories.PasswordResetTokenRepository;
 import com.artatech.bilerman.AccountManager.Repositories.VerificationTokenRepository;
+import com.artatech.bilerman.Entities.Article;
+import com.artatech.bilerman.Entities.Clap;
+import com.artatech.bilerman.Entities.SavedArticle;
 import com.artatech.bilerman.Exeptions.AppException;
 import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
 import com.artatech.bilerman.AccountManager.Repositories.RoleRepository;
@@ -21,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -168,6 +172,42 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow();
         user.setPassword(passwordEncoder.encode(password));
         save(user);
+    }
+
+    @Override
+    public User saveArticle(Long id, Article article) {
+        User user = findById(id);
+        boolean exists = false;
+        for(SavedArticle savedArticle: user.getSavedArticles()) {
+            if (savedArticle.getArticle().equals(article)) {
+                exists = true;
+                user.getSavedArticles().remove(savedArticle);
+            }
+        }
+
+        if(!exists) {
+            SavedArticle savedArticle = new SavedArticle(article, user);
+            user.getSavedArticles().add(savedArticle);
+        }
+        return save(user);
+    }
+
+    @Override
+    public User clapArticle(Long id, Article article) {
+        User user = findById(id);
+        boolean exists = false;
+        for(Clap clap: user.getClaps()) {
+            if (clap.getArticle().equals(article)) {
+                exists = true;
+                clap.setCount(clap.getCount() + 1);
+            }
+        }
+
+        if(!exists) {
+            Clap clap = new Clap(article, user);
+            user.getClaps().add(clap);
+        }
+        return encodersave(user);
     }
 
     private String getImageLocation(Instant createdAt, String type) {

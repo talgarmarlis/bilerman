@@ -40,6 +40,14 @@ public class Article extends CreateAudit {
     @JoinTable(name = "article_tag", joinColumns = { @JoinColumn(name = "article_id") }, inverseJoinColumns = { @JoinColumn(name = "tag_id") })
     private Set<Tag> tags = new HashSet<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SavedArticle> savedArticles;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Clap> claps;
+
     @ManyToOne
     @JoinColumn(name="createdBy", nullable=false, insertable = false, updatable = false)
     private User user;
@@ -114,6 +122,22 @@ public class Article extends CreateAudit {
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    public Set<SavedArticle> getSavedArticles() {
+        return savedArticles;
+    }
+
+    public void setSavedArticles(Set<SavedArticle> savedArticles) {
+        this.savedArticles = savedArticles;
+    }
+
+    public Set<Clap> getClaps() {
+        return claps;
+    }
+
+    public void setClaps(Set<Clap> claps) {
+        this.claps = claps;
     }
 
     public User getUser() {

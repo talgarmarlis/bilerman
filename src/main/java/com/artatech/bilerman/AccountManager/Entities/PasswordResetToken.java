@@ -7,7 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Entity
-public class PasswordResetToken extends DateAudit {
+public class
+PasswordResetToken extends DateAudit {
 
     private static final int EXPIRATION = 60 * 24;
 

@@ -1,6 +1,11 @@
 package com.artatech.bilerman.AccountManager.Entities;
 
 import com.artatech.bilerman.AccountManager.Models.Audit.DateAudit;
+import com.artatech.bilerman.Entities.Article;
+import com.artatech.bilerman.Entities.Clap;
+import com.artatech.bilerman.Entities.SavedArticle;
+import com.artatech.bilerman.Entities.Tag;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -48,11 +53,19 @@ public class User extends DateAudit {
     @Size(max = 100)
     private String cover;
 
-    private boolean enabled;
+    private Boolean enabled;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SavedArticle> savedArticles;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Clap> claps;
 
     public User(){
         this.enabled = false;
@@ -136,11 +149,11 @@ public class User extends DateAudit {
         this.cover = cover;
     }
 
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -150,5 +163,21 @@ public class User extends DateAudit {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<SavedArticle> getSavedArticles() {
+        return savedArticles;
+    }
+
+    public void setSavedArticles(Set<SavedArticle> savedArticles) {
+        this.savedArticles = savedArticles;
+    }
+
+    public Set<Clap> getClaps() {
+        return claps;
+    }
+
+    public void setClaps(Set<Clap> claps) {
+        this.claps = claps;
     }
 }
