@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
             Clap clap = new Clap(article, user);
             user.getClaps().add(clap);
         }
-        return encodersave(user);
+        return save(user);
     }
 
     private String getImageLocation(Instant createdAt, String type) {
