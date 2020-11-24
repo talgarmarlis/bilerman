@@ -1,13 +1,13 @@
 package com.artatech.bilerman.Models;
 
 import com.artatech.bilerman.AccountManager.Entities.User;
-import com.artatech.bilerman.AccountManager.Models.Audit.CreateAudit;
+import com.artatech.bilerman.AccountManager.Models.Audit.CreateUserAudit;
 import com.artatech.bilerman.Entities.Article;
 import com.artatech.bilerman.Entities.Tag;
 
 import java.util.Set;
 
-public class ArticleDetails extends CreateAudit {
+public class ArticleDetails extends CreateUserAudit {
 
     private Long id;
 

@@ -1,18 +1,10 @@
 package com.artatech.bilerman.Models;
 
 import com.artatech.bilerman.AccountManager.Entities.User;
-import com.artatech.bilerman.AccountManager.Models.Audit.CreateAudit;
+import com.artatech.bilerman.AccountManager.Models.Audit.CreateUserAudit;
 import com.artatech.bilerman.Entities.Article;
-import com.artatech.bilerman.Entities.Draft;
-import com.artatech.bilerman.Entities.Tag;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
-
-public class ArticleModel extends CreateAudit {
+public class ArticleModel extends CreateUserAudit {
 
     private Long id;
 

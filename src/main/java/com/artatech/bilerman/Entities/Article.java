@@ -1,7 +1,7 @@
 package com.artatech.bilerman.Entities;
 
 import com.artatech.bilerman.AccountManager.Entities.User;
-import com.artatech.bilerman.AccountManager.Models.Audit.CreateAudit;
+import com.artatech.bilerman.AccountManager.Models.Audit.CreateUserAudit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 
 @Entity
-public class Article extends CreateAudit {
+public class Article extends CreateUserAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

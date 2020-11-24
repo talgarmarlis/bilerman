@@ -11,7 +11,7 @@ import javax.persistence.MappedSuperclass;
         value = {"createdBy"},
         allowGetters = true
 )
-public abstract class CreateAudit extends CreateDateAudit {
+public abstract class CreateUserAudit extends CreateDateAudit {
     @CreatedBy
     @Column(nullable = false, updatable = false)
     private Long createdBy;
