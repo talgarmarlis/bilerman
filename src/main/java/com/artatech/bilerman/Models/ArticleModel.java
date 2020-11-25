@@ -3,6 +3,9 @@ package com.artatech.bilerman.Models;
 import com.artatech.bilerman.AccountManager.Entities.User;
 import com.artatech.bilerman.AccountManager.Models.Audit.CreateUserAudit;
 import com.artatech.bilerman.Entities.Article;
+import com.artatech.bilerman.Entities.Clap;
+
+import java.util.stream.Collectors;
 
 public class ArticleModel extends CreateUserAudit {
 
@@ -31,8 +34,8 @@ public class ArticleModel extends CreateUserAudit {
         this.subtitle = article.getSubtitle();
         this.imageId = article.getImageId();
         this.views = article.getViews();
-        this.comments = 0;
-        this.claps = 0;
+        this.comments = article.getComments().size();
+        this.claps = article.getClaps().stream().collect(Collectors.summingInt(Clap::getCount));
         this.user = article.getUser();
         this.setCreatedAt(article.getCreatedAt());
         this.setCreatedBy(article.getCreatedBy());

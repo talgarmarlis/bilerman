@@ -178,14 +178,16 @@ public class UserServiceImpl implements UserService {
     public User saveArticle(Long id, Article article) {
         User user = findById(id);
         boolean exists = false;
+        SavedArticle toRemove = new SavedArticle();
         for(SavedArticle savedArticle: user.getSavedArticles()) {
             if (savedArticle.getArticle().equals(article)) {
                 exists = true;
-                user.getSavedArticles().remove(savedArticle);
+                toRemove = savedArticle;
             }
         }
 
-        if(!exists) {
+        if(exists) user.getSavedArticles().remove(toRemove);
+        else {
             SavedArticle savedArticle = new SavedArticle(article, user);
             user.getSavedArticles().add(savedArticle);
         }

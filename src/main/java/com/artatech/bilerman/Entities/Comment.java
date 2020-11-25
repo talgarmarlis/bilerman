@@ -29,6 +29,11 @@ public class Comment extends CreateUserDateAudit {
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private Set<Reply> replies;
 
+    @ManyToOne
+    @MapsId("articleId")
+    @JoinColumn(name = "article_id")
+    private Article article;
+
     public Comment() {}
 
     public Long getId() {
@@ -69,5 +74,13 @@ public class Comment extends CreateUserDateAudit {
 
     public void setReplies(Set<Reply> replies) {
         this.replies = replies;
+    }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
     }
 }

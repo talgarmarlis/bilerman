@@ -61,7 +61,7 @@ public class User extends DateAudit {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<SavedArticle> savedArticles;
+    private Set<SavedArticle> savedArticles = new HashSet<>();;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

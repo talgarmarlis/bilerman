@@ -48,6 +48,10 @@ public class Article extends CreateUserAudit {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Clap> claps;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments;
+
     @ManyToOne
     @JoinColumn(name="createdBy", nullable=false, insertable = false, updatable = false)
     private User user;
@@ -138,6 +142,14 @@ public class Article extends CreateUserAudit {
 
     public void setClaps(Set<Clap> claps) {
         this.claps = claps;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     public User getUser() {
