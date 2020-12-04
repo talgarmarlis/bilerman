@@ -27,6 +27,9 @@ public class Article extends CreateUserAudit {
     @Column(name = "image_id")
     private Long imageId;
 
+    @Column(name = "language_id")
+    private Long languageId;
+
     private Integer views;
 
     private String body;
@@ -94,6 +97,14 @@ public class Article extends CreateUserAudit {
 
     public void setImageId(Long imageId) {
         this.imageId = imageId;
+    }
+
+    public Long getLanguageId() {
+        return languageId;
+    }
+
+    public void setLanguageId(Long languageId) {
+        this.languageId = languageId;
     }
 
     public Integer getViews() {

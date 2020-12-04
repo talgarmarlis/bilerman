@@ -13,6 +13,8 @@ public interface TagService {
 
     Collection<Tag> findAll();
 
+    Collection<Tag> getFamiliarTags(String tagName, Integer size);
+
     Tag findById(Long id);
 
     Tag findByName(String tagName);

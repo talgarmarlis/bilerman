@@ -8,6 +8,8 @@ public class PublicationModel {
 
     private String subtitle;
 
+    private Long languageId;
+
     private String[] tags;
 
     public Long getDraftId() {
@@ -32,6 +34,14 @@ public class PublicationModel {
 
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
+    }
+
+    public Long getLanguageId() {
+        return languageId;
+    }
+
+    public void setLanguageId(Long languageId) {
+        this.languageId = languageId;
     }
 
     public String[] getTags() {

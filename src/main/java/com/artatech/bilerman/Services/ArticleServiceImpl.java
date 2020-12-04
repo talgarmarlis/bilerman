@@ -13,6 +13,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Function;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -47,6 +48,14 @@ public class ArticleServiceImpl implements ArticleService {
         else if(userId == null) return articleRepository.findAllByTitleContainingIgnoreCase(title, pageable);
         else if(title == null) return articleRepository.findAllByCreatedBy(userId, pageable);
         return articleRepository.findAllByCreatedByAndTitleContainingIgnoreCase(userId, title, pageable);
+    }
+
+    @Override
+    public Page<ArticleModel> findByTagName(String tagName, String orderBy, String direction, Integer page, Integer size) {
+        Tag tag = tagService.findByName(tagName);
+        if(tag == null) return Page.empty();
+        Pageable pageable = PageRequest.of(page, size, direction.equals("DESC") ? Sort.by(orderBy).descending() : Sort.by(orderBy));
+        return articleRepository.findAllByTagsContaining(tag, pageable).map(article -> {return new ArticleModel(article);});
     }
 
     @Override
@@ -96,12 +105,14 @@ public class ArticleServiceImpl implements ArticleService {
             article = draft.getArticle();
             article.setTitle(model.getTitle());
             article.setSubtitle(model.getSubtitle());
+            article.setLanguageId(model.getLanguageId());
             article.setBody(draft.getBody());
             if(article.getImageId() != draft.getImageId()) deleteImageId = article.getImageId();
             article.setImageId(draft.getImageId());
         }
         else  {
             article = new Article(model.getTitle(), model.getSubtitle(), draft.getBody());
+            article.setLanguageId(model.getLanguageId());
             article.setImageId(draft.getImageId());
             article.setDraft(draft);
             draft.setArticle(article);

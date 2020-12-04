@@ -21,6 +21,8 @@ public interface ArticleService {
 
     Page<ArticleModel> findByPage(Long userId, String title, String orderBy, String direction, Integer page, Integer size);
 
+    Page<ArticleModel> findByTagName(String tagName, String orderBy, String direction, Integer page, Integer size);
+
     Article findById(Long articleId);
 
     ArticleDetails getArticleDetailsById(Long articleId);
