@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
@@ -75,14 +75,16 @@ public class AuthenticationService {
             String token = UUID.randomUUID().toString();
             service.createVerificationToken(user, token);
 
-            String confirmationUrl = APPLICATION_URL + "/#/user/confirm?token=" + token;
-            File input = new File(getClass().getClassLoader().getResource("templates/email_template.html").getFile());
+            String confirmationUrl = APPLICATION_URL + "/#/auth/confirm/" + token;
+            InputStream input = getClass().getResourceAsStream("/templates/email.html");
             Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
             String html = doc.html();
-            html = html.replace("{{name}}", user.getName());
+            html = html.replace("{{url}}", APPLICATION_URL);
+            html = html.replace("{{header}}", "Activate your account");
+            html = html.replace("{{greeting}}", "Dear " + user.getName() + ",");
             html = html.replace("{{top}}", "We're excited to have you get started. First, you need to confirm your account. Just press the button below.");
             html = html.replace("{{bottom}}", "If you did not register to our site, you can safely ignore this email.");
-            html = html.replace("{{button_name}}", "Activate");
+            html = html.replace("{{button_label}}", "Activate");
             html = html.replace("{{action_url}}", confirmationUrl);
             String message = html;
 
@@ -104,14 +106,16 @@ public class AuthenticationService {
             String token = UUID.randomUUID().toString();
             service.createPasswordResetToken(user, token);
 
-            String resetURL = APPLICATION_URL + "/#/user/password/reset?token=" + token;
-            File input = new File(getClass().getClassLoader().getResource("templates/email_template.html").getFile());
+            String resetURL = APPLICATION_URL + "/#/auth/password/reset/" + token;
+            InputStream input = getClass().getResourceAsStream("/templates/email.html");
             Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
             String html = doc.html();
-            html = html.replace("{{name}}", user.getName());
+            html = html.replace("{{url}}", APPLICATION_URL);
+            html = html.replace("{{header}}", "Reset password");
+            html = html.replace("{{greeting}}", "Dear " + user.getName() + ",");
             html = html.replace("{{top}}", "Seems like you forgot your password for Bilerman. If this is true, click below to reset your password.");
             html = html.replace("{{bottom}}", "If it was not you, you can safely ignore this email.");
-            html = html.replace("{{button_name}}", "Reset password");
+            html = html.replace("{{button_label}}", "Reset password");
             html = html.replace("{{action_url}}", resetURL);
             String message = html;
 
