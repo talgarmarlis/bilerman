@@ -27,14 +27,9 @@ public class UserController {
         return userService.findById(id);
     }
 
-//    @GetMapping("/{email}")
-//    public User getUserByEmail(@PathVariable("email") String email){
-//        return userService.findByEmail(email);
-//    }
-
     @PostMapping()
     public User updateUser(@RequestBody User user){
-        return userService.save(user);
+        return userService.update(user);
     }
 
     @GetMapping("/me")

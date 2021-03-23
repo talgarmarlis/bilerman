@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email.trim().toLowerCase());
     }
 
     @Override
@@ -75,12 +75,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
+        return userRepository.existsByEmail(email.trim().toLowerCase());
     }
 
     @Override
     public User create(User user) {
         // Creating user's account
+        user.setEmail(user.getEmail().trim().toLowerCase());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         User saved = findById(user.getId());
-        BeanUtils.copyProperties(user, saved, "id", "email", "password", "avatar", "cover");
+        BeanUtils.copyProperties(user, saved, "id", "email", "password", "avatar", "cover", "roles", "claps", "savedArticles");
         return save(saved);
     }
 

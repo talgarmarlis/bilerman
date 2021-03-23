@@ -65,7 +65,7 @@ public class User extends DateAudit {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Clap> claps;
+    private Set<Clap> claps = new HashSet<>();
 
     public User(){
         this.enabled = false;
