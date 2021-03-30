@@ -65,6 +65,7 @@ spring:
     schemas: bilerman
     user: postgres
     password: root
+    baseline-version: 5
 
 app:
   url: http://localhost:3000
@@ -80,19 +81,19 @@ spring:
   profiles: prod
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://bilerman-prod.cbyiljxj7wrz.eu-central-1.rds.amazonaws.com:5432/postgres
     username: postgres
-    password: root
+    password: bilerman2020
   flyway:
-    url: jdbc:postgresql://localhost:5432/
+    url: jdbc:postgresql://bilerman-prod.cbyiljxj7wrz.eu-central-1.rds.amazonaws.com:5432/
     schemas: bilerman
     user: postgres
-    password: root
+    password: bilerman2020
 
 app:
-  url: http://45.9.190.155
+  url: http://bilerman.kg
   file:
-    upload-dir: /root/bilerman/resources/images
+    upload-dir: C:/Users/Administrator/Desktop/bilerman-files
 
 server:
-  port: 8888
+  port: 80
