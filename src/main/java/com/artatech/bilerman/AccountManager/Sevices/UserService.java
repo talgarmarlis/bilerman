@@ -8,7 +8,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
 
@@ -18,9 +17,19 @@ public interface UserService {
 
     User findByEmail(String email);
 
+    User findByFacebookId(String id);
+
+    User findByGoogleId(String id);
+
     List<User> findByIdIn(List<Long> userIds);
 
+    Boolean existsById(Long id);
+
     Boolean existsByEmail(String email);
+
+    Boolean existsByFacebookId(String id);
+
+    Boolean existsByGoogleId(String id);
 
     User create(User user);
 
@@ -33,10 +42,6 @@ public interface UserService {
     User updateAvatar(MultipartFile file, Long userId);
 
     Resource getAvatar(Long userId);
-
-    User updateCover(MultipartFile file, Long userId);
-
-    Resource getCover(Long userId);
 
     void createVerificationToken(User user, String token);
 
@@ -51,4 +56,6 @@ public interface UserService {
     User saveArticle(Long id, Article article);
 
     User clapArticle(Long id, Article article);
+
+    String generatePassword(Integer length);
 }

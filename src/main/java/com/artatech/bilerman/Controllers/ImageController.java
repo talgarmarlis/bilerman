@@ -1,5 +1,6 @@
 package com.artatech.bilerman.Controllers;
 
+import com.artatech.bilerman.Enums.ImageCategory;
 import com.artatech.bilerman.Services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -13,14 +14,14 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
 
-    @PostMapping()
-    public Long uploadImage(@RequestParam("file") MultipartFile file){
-        return imageService.upload(file);
+    @PostMapping("/{category}")
+    public Long uploadImage(@PathVariable("category") String category, @RequestParam("file") MultipartFile file){
+        return imageService.upload(ImageCategory.valueOf(category.toUpperCase()), file);
     }
 
-    @GetMapping("/{id}")
-    public Resource downloadImage(@PathVariable("id") Long id){
-        return imageService.download(id);
+    @GetMapping("/{category}/{id}")
+    public Resource downloadImage(@PathVariable("category") String category, @PathVariable("id") Long id){
+        return imageService.download(ImageCategory.valueOf(category.toUpperCase()), id);
     }
 
 }

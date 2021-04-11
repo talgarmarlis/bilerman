@@ -10,10 +10,12 @@ import com.artatech.bilerman.AccountManager.Repositories.VerificationTokenReposi
 import com.artatech.bilerman.Entities.Article;
 import com.artatech.bilerman.Entities.Clap;
 import com.artatech.bilerman.Entities.SavedArticle;
+import com.artatech.bilerman.Enums.ImageCategory;
 import com.artatech.bilerman.Exeptions.AppException;
 import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
 import com.artatech.bilerman.AccountManager.Repositories.RoleRepository;
 import com.artatech.bilerman.AccountManager.Repositories.UserRepository;
+import com.artatech.bilerman.Services.ImageService;
 import com.artatech.bilerman.Services.StorageService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,8 @@ public class UserServiceImpl implements UserService {
 
     PasswordEncoder passwordEncoder;
 
+    ImageService imageService;
+
     StorageService storageService;
 
     VerificationTokenRepository tokenRepository;
@@ -43,11 +47,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,
-                           StorageService storageService, VerificationTokenRepository tokenRepository,
+                           ImageService imageService, StorageService storageService, VerificationTokenRepository tokenRepository,
                            PasswordResetTokenRepository passwordResetTokenRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.imageService = imageService;
         this.storageService = storageService;
         this.tokenRepository = tokenRepository;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
@@ -69,13 +74,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findByFacebookId(String id) {
+        return userRepository.findByFacebookId(id);
+    }
+
+    @Override
+    public User findByGoogleId(String id) {
+        return userRepository.findByGoogleId(id);
+    }
+
+    @Override
     public List<User> findByIdIn(List<Long> userIds) {
         return userRepository.findByIdIn(userIds);
     }
 
     @Override
+    public Boolean existsById(Long id) {
+        return userRepository.existsById(id);
+    }
+
+    @Override
     public Boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email.trim().toLowerCase());
+    }
+
+    @Override
+    public Boolean existsByFacebookId(String id) {
+        return userRepository.existsByFacebookId(id);
+    }
+
+    @Override
+    public Boolean existsByGoogleId(String id) {
+        return userRepository.existsByGoogleId(id);
     }
 
     @Override
@@ -99,7 +129,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         User saved = findById(user.getId());
-        BeanUtils.copyProperties(user, saved, "id", "email", "password", "avatar", "cover", "roles", "claps", "savedArticles");
+        BeanUtils.copyProperties(user, saved, "id", "email", "password", "avatar", "roles", "claps", "savedArticles");
         return save(saved);
     }
 
@@ -111,33 +141,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateAvatar(MultipartFile file, Long userId) {
         User user = findById(userId);
-        if(user.getAvatar() != null) storageService.delete(user.getAvatar(), getImageLocation(user.getCreatedAt(), "avatar"));
-        String fileName = storageService.store(file, getImageLocation(user.getCreatedAt(), "avatar"));
-        user.setAvatar(fileName);
+        if(user.getAvatar() != null){
+            Long imageId = user.getAvatar();
+            user.setAvatar(null);
+            save(user);
+            imageService.delete(ImageCategory.USER, imageId);
+        }
+        Long imageId = imageService.upload(ImageCategory.USER, file);
+        user.setAvatar(imageId);
         return save(user);
     }
 
     @Override
     public Resource getAvatar(Long userId) {
         User user = findById(userId);
-        if(user.getAvatar() == null) return storageService.load("default.png", "/avatar");
-        return storageService.load(user.getAvatar(), getImageLocation(user.getCreatedAt(), "avatar"));
-    }
-
-    @Override
-    public User updateCover(MultipartFile file, Long userId) {
-        User user = findById(userId);
-        if(user.getCover() != null) storageService.delete(user.getCover(), getImageLocation(user.getCreatedAt(), "cover"));
-        String fileName = storageService.store(file, getImageLocation(user.getCreatedAt(), "cover"));
-        user.setCover(fileName);
-        return save(user);
-    }
-
-    @Override
-    public Resource getCover(Long userId) {
-        User user = findById(userId);
-        if(user.getCover() == null) return storageService.load("default.png", "/cover");
-        return storageService.load(user.getCover(), getImageLocation(user.getCreatedAt(), "cover"));
+        return imageService.download(ImageCategory.USER, user.getAvatar());
     }
 
     @Override
@@ -213,12 +231,24 @@ public class UserServiceImpl implements UserService {
         return save(user);
     }
 
-    private String getImageLocation(Instant createdAt, String type) {
-        String result = "/" + type;
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(Date.from(createdAt));
-        result += "/" + cal.get(Calendar.YEAR);
-        result += "/" + cal.get(Calendar.MONTH);
-        return result;
+    @Override
+    public String generatePassword(Integer length) {
+        String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+        String specialCharacters = "!@#$";
+        String numbers = "1234567890";
+        String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
+        Random random = new Random();
+        char[] password = new char[length];
+
+        password[0] = lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length()));
+        password[1] = capitalCaseLetters.charAt(random.nextInt(capitalCaseLetters.length()));
+        password[2] = specialCharacters.charAt(random.nextInt(specialCharacters.length()));
+        password[3] = numbers.charAt(random.nextInt(numbers.length()));
+
+        for(int i = 4; i< length ; i++) {
+            password[i] = combinedChars.charAt(random.nextInt(combinedChars.length()));
+        }
+        return new String(password);
     }
 }

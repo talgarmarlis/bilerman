@@ -43,6 +43,18 @@ spring:
           socketFactory:
             port: 465
             class: javax.net.ssl.SSLSocketFactory
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 954240969904-s2np4orushqhv8kf8attpekc1sf78lej.apps.googleusercontent.com
+            client-secret: RXl3quxmjl2jn-GugWk60y-9
+            redirect-uri: http://localhost:3000/auth/google
+            scope:
+              - email
+              - profile
+              - openid
 
 logging:
   level:

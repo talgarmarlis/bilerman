@@ -68,24 +68,4 @@ public class UserController {
     public Resource getAvatar(@PathVariable("id") Long id){
         return userService.getAvatar(id);
     }
-
-    @PostMapping("/cover")
-    public User updateCover(@RequestParam("file") MultipartFile file, @CurrentUser UserPrincipal currentUser){
-        return userService.updateCover(file, currentUser.getId());
-    }
-
-    @PostMapping("/{id}/cover")
-    public User updateCover(@RequestParam("file") MultipartFile file, @PathVariable("id") Long id){
-        return userService.updateCover(file, id);
-    }
-
-    @GetMapping("/cover")
-    public Resource getCover(@CurrentUser UserPrincipal currentUser){
-        return userService.getCover(currentUser.getId());
-    }
-
-    @GetMapping("/{id}/cover")
-    public Resource getCover(@PathVariable("id") Long id){
-        return userService.getCover(id);
-    }
 }

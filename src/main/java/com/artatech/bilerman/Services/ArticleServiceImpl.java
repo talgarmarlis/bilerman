@@ -3,6 +3,7 @@ package com.artatech.bilerman.Services;
 import com.artatech.bilerman.Entities.Article;
 import com.artatech.bilerman.Entities.Draft;
 import com.artatech.bilerman.Entities.Tag;
+import com.artatech.bilerman.Enums.ImageCategory;
 import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
 import com.artatech.bilerman.Models.ArticleDetails;
 import com.artatech.bilerman.Models.ArticleModel;
@@ -132,7 +133,7 @@ public class ArticleServiceImpl implements ArticleService {
         Article saved = save(article);
         draft.setPublished(true);
         draftService.save(draft);
-        if(deleteImageId != null) imageService.delete(deleteImageId);
+        if(deleteImageId != null) imageService.delete(ImageCategory.ARTICLE, deleteImageId);
         return saved;
     }
 }

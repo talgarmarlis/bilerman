@@ -6,9 +6,9 @@ import com.artatech.bilerman.AccountManager.Entities.VerificationToken;
 import com.artatech.bilerman.AccountManager.Models.Payloads.ApiResponse;
 import com.artatech.bilerman.AccountManager.Models.Payloads.JwtAuthenticationResponse;
 import com.artatech.bilerman.AccountManager.Models.LoginRequest;
+import com.artatech.bilerman.AccountManager.Security.CustomOAuth2User;
 import com.artatech.bilerman.AccountManager.Security.JwtTokenProvider;
-import com.artatech.bilerman.AccountManager.Sevices.AuthenticationService;
-import com.artatech.bilerman.AccountManager.Sevices.UserService;
+import com.artatech.bilerman.AccountManager.Sevices.*;
 import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -18,7 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -26,7 +30,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -45,7 +51,16 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @Autowired
+    FaceBookService faceBookService;
+
+    @Autowired
+    GoogleService googleService;
+
+    @Autowired
     JwtTokenProvider tokenProvider;
+
+    @Autowired
+    CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     private MessageSource messages;
@@ -59,6 +74,30 @@ public class AuthenticationController {
                         loginRequest.getPassword()
                 )
         );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwt = tokenProvider.generateToken(authentication);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+    }
+
+    @PostMapping("/facebook/{token}")
+    public ResponseEntity<?> authenticateFacebookUser(@PathVariable("token") String fbAccessToken) {
+        User user = faceBookService.getUser(fbAccessToken);
+        UserDetails userDetails = customUserDetailsService.loadUserById(user.getId());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwt = tokenProvider.generateToken(authentication);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+    }
+
+    @PostMapping("/google/{token}")
+    public ResponseEntity<?> authenticateGoogleUser(@PathVariable("token") String gToken) {
+        User user = googleService.getUser(gToken);
+        UserDetails userDetails = customUserDetailsService.loadUserById(user.getId());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

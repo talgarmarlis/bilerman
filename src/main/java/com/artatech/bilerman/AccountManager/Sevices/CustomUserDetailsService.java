@@ -1,7 +1,7 @@
-package com.artatech.bilerman.AccountManager.Security;
+package com.artatech.bilerman.AccountManager.Sevices;
 
 import com.artatech.bilerman.AccountManager.Entities.User;
-import com.artatech.bilerman.AccountManager.Sevices.UserService;
+import com.artatech.bilerman.AccountManager.Security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

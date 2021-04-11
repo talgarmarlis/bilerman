@@ -1,6 +1,7 @@
 package com.artatech.bilerman.Configuration;
 
-import com.artatech.bilerman.AccountManager.Security.CustomUserDetailsService;
+import com.artatech.bilerman.AccountManager.Sevices.CustomOAuth2UserService;
+import com.artatech.bilerman.AccountManager.Sevices.CustomUserDetailsService;
 import com.artatech.bilerman.AccountManager.Security.JwtAuthenticationEntryPoint;
 import com.artatech.bilerman.AccountManager.Security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    CustomOAuth2UserService customOAuth2UserService;
 
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
@@ -74,42 +78,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**", "/api/articles/**", "/api/comments/**", "/api/tags/**")
+                .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**", "/api/articles/**", "/api/comments/**", "/api/tags/**", "/oauth2/**")
                 .permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and()
+                .oauth2Login()
+                    .userInfoEndpoint()
+                        .userService(customOAuth2UserService);
 
         // Add our custom JWT security filter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
-
-
-
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable().cors()
-//                .and().authorizeRequests()
-//                .antMatchers(HttpMethod.POST, "/login").permitAll()
-//                .antMatchers(HttpMethod.POST, "/api/users/register").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .addFilterBefore(new LoginFilter("/login", authenticationManager()),
-//                        UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(new AuthenticationFilter(),
-//                        UsernamePasswordAuthenticationFilter.class);
-//    }
-//
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("*"));
-//        configuration.setAllowedMethods(Arrays.asList("*"));
-//        configuration.setAllowedHeaders(Arrays.asList("*"));
-//        configuration.setAllowCredentials(true);
-//        configuration.applyPermitDefaultValues();
-//
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
 }

@@ -44,27 +44,28 @@ public class User extends DateAudit {
     @Size(max = 1000)
     private String bio;
 
-    @Size(max = 250)
-    private String mind;
-
-    @Size(max = 100)
-    private String avatar;
-
-    @Size(max = 100)
-    private String cover;
+    private Long avatar;
 
     private Boolean enabled;
+
+    @NaturalId
+    @Column(name = "facebook_id")
+    private String facebookId;
+
+    @NaturalId
+    @Column(name = "google_id")
+    private String googleId;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private Set<SavedArticle> savedArticles = new HashSet<>();;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Clap> claps = new HashSet<>();
 
     public User(){
@@ -125,28 +126,12 @@ public class User extends DateAudit {
         this.bio = bio;
     }
 
-    public String getMind() {
-        return mind;
-    }
-
-    public void setMind(String mind) {
-        this.mind = mind;
-    }
-
-    public String getAvatar() {
+    public Long getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(Long avatar) {
         this.avatar = avatar;
-    }
-
-    public String getCover() {
-        return cover;
-    }
-
-    public void setCover(String cover) {
-        this.cover = cover;
     }
 
     public Boolean isEnabled() {
@@ -155,6 +140,22 @@ public class User extends DateAudit {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getFacebookId() {
+        return facebookId;
+    }
+
+    public void setFacebookId(String facebookId) {
+        this.facebookId = facebookId;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
     }
 
     public Set<Role> getRoles() {

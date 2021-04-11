@@ -1,6 +1,7 @@
 package com.artatech.bilerman.Services;
 
 import com.artatech.bilerman.Entities.Image;
+import com.artatech.bilerman.Enums.ImageCategory;
 import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
 import com.artatech.bilerman.Repositories.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,35 +42,46 @@ public class ImageServiceImpl implements ImageService{
     }
 
     @Override
-    public void delete(Image image) {
-        storageService.delete(image.getName(), getImageLocation(image.getCreatedAt()));
+    public void delete(ImageCategory category, Image image) {
+        storageService.delete(image.getName(), getImageLocation(category, image.getCreatedAt()));
         imageRepository.delete(image);
     }
 
     @Override
-    public void delete(Long imageId) {
-        delete(findById(imageId));
+    public void delete(ImageCategory category, Long imageId) {
+        delete(category, findById(imageId));
     }
 
     @Override
-    public Long upload(MultipartFile file) {
+    public Long upload(ImageCategory category, MultipartFile file) {
         Image image = new Image();
         image.setName("default");
         image = save(image);
-        String fileName =  storageService.store(file, getImageLocation(image.getCreatedAt()));
+        String fileName =  storageService.store(file, getImageLocation(category, image.getCreatedAt()));
         image.setName(fileName);
         image = save(image);
         return image.getId();
     }
 
     @Override
-    public Resource download(Long imageId) {
-        Image image = findById(imageId);
-        return storageService.load(image.getName(), getImageLocation(image.getCreatedAt()));
+    public Long upload(ImageCategory category, String url) {
+        Image image = new Image();
+        image.setName("default");
+        image = save(image);
+        String fileName =  storageService.store(url, getImageLocation(category, image.getCreatedAt()));
+        image.setName(fileName);
+        image = save(image);
+        return image.getId();
     }
 
-    private String getImageLocation(Instant createdAt){
-        String result = "/article";
+    @Override
+    public Resource download(ImageCategory category, Long imageId) {
+        Image image = findById(imageId);
+        return storageService.load(image.getName(), getImageLocation(category, image.getCreatedAt()));
+    }
+
+    private String getImageLocation(ImageCategory category, Instant createdAt){
+        String result = "/" + category.toString().toLowerCase();
         Calendar cal = Calendar.getInstance();
         cal.setTime(Date.from(createdAt));
         result += "/" + cal.get(Calendar.YEAR);

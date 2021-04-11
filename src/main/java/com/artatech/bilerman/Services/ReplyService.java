@@ -1,6 +1,5 @@
 package com.artatech.bilerman.Services;
 
-import com.artatech.bilerman.Entities.Comment;
 import com.artatech.bilerman.Entities.Reply;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;

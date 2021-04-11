@@ -1,7 +1,7 @@
 package com.artatech.bilerman.Services;
 
-import com.artatech.bilerman.Entities.Article;
 import com.artatech.bilerman.Entities.Draft;
+import com.artatech.bilerman.Enums.ImageCategory;
 import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
 import com.artatech.bilerman.Repositories.DraftRepository;
 import org.springframework.beans.BeanUtils;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DraftServiceImpl implements DraftService {
@@ -70,13 +69,13 @@ public class DraftServiceImpl implements DraftService {
             saved = draftRepository.save(saved);
         }
         else saved = draftRepository.save(draft);
-        if(deleteImageId != null) imageService.delete(deleteImageId);
+        if(deleteImageId != null) imageService.delete(ImageCategory.ARTICLE, deleteImageId);
         return saved;
     }
 
     @Override
     public void delete(Draft draft) {
-        if(draft != null) imageService.delete(draft.getImageId());
+        if(draft != null) imageService.delete(ImageCategory.ARTICLE, draft.getImageId());
         draftRepository.delete(draft);
     }
 

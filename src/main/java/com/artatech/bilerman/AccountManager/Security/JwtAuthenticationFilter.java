@@ -1,5 +1,6 @@
 package com.artatech.bilerman.AccountManager.Security;
 
+import com.artatech.bilerman.AccountManager.Sevices.CustomUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -14,7 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,6 +35,20 @@ public class StorageService {
             // Copy file to the target location (Replacing existing file with the same name)
             Path filePath = getPath(location).resolve(fileName);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            return fileName;
+        } catch (IOException ex) {
+            throw new AppException("Could not store file " + fileName + ". Please try again!", ex);
+        }
+    }
+
+    public String store(String url, String location) {
+        String fileName = UUID.randomUUID().toString() + ".jpg";
+        try {
+            // Copy file to the target location (Replacing existing file with the same name)
+            Path filePath = getPath(location).resolve(fileName);
+            InputStream in = new URL(url).openStream();
+            Files.copy(in, filePath, StandardCopyOption.REPLACE_EXISTING);
 
             return fileName;
         } catch (IOException ex) {
