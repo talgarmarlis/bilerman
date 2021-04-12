@@ -1,10 +1,5 @@
 package com.artatech.bilerman.AccountManager.Models;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor
-@AllArgsConstructor
 public class FacebookPictureData {
 
     private String height;
