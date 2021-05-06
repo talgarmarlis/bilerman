@@ -1,4 +1,8 @@
 {
+  "SSH IP": "45.9.190.155",
+  "SSH Port": 22,
+  "SSH Username": "root",
+  "IPV6": "2a02:4780:8:6:2:30f3:f5e0:b244",
   "password": "H2C-2pZ-Rbe-pPQ",
   "postgres_user": "bilerman_admin",
   "postgres_user_password": "bilerman2020"
