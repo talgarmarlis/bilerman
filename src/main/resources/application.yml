@@ -102,7 +102,7 @@ spring:
     password: root
 
 app:
-  url: http://45.9.190.155
+  url: https://bilerman.kg
   file:
     upload-dir: /root/bilerman/resources/images
 
