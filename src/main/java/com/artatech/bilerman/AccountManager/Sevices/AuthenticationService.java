@@ -80,18 +80,19 @@ public class AuthenticationService {
             Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
             String html = doc.html();
             html = html.replace("{{url}}", APPLICATION_URL);
-            html = html.replace("{{header}}", "Activate your account");
-            html = html.replace("{{greeting}}", "Dear " + user.getName() + ",");
-            html = html.replace("{{top}}", "We're excited to have you get started. First, you need to confirm your account. Just press the button below.");
-            html = html.replace("{{bottom}}", "If you did not register to our site, you can safely ignore this email.");
-            html = html.replace("{{button_label}}", "Activate");
+            html = html.replace("{{header}}", "Аккаунтуңузду улаңыз");
+            html = html.replace("{{greeting}}", "Урматтуу " + user.getName() + ",");
+            html = html.replace("{{top}}", "Биз менен жазып баштаганыңызга абдан кубанычтабыз! Биздин тиркемебизди колдонуп баштоо үчүн биринчиден, сиздин аккаунту ырастоо керек. Ал үчүн төмөндөгү баскычты басыңыз.");
+            html = html.replace("{{copyPasteLink}}", "Эгерде жогорудагы баскыч иштебей калса, анда төмөнкү шилтемени копиялап, браузериңизге коюп издеңиз");
+            html = html.replace("{{bottom}}", "Эгерде бул кат сизге адашып келген болсо, жөн эле өчүрүп салсаңыз болот");
+            html = html.replace("{{button_label}}", "Ырастоо");
             html = html.replace("{{action_url}}", confirmationUrl);
             String message = html;
 
             MimeMessagePreparator messagePreparator = mimeMessage -> {
                 MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
                 messageHelper.setTo(user.getEmail());
-                messageHelper.setSubject("Bilerman account confirmation");
+                messageHelper.setSubject("Билерман аккаунтуңузду ырастаңыз");
                 messageHelper.setText(message, true);
             };
             mailSender.send(messagePreparator);
@@ -111,18 +112,19 @@ public class AuthenticationService {
             Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
             String html = doc.html();
             html = html.replace("{{url}}", APPLICATION_URL);
-            html = html.replace("{{header}}", "Reset password");
-            html = html.replace("{{greeting}}", "Dear " + user.getName() + ",");
-            html = html.replace("{{top}}", "Seems like you forgot your password for Bilerman. If this is true, click below to reset your password.");
-            html = html.replace("{{bottom}}", "If it was not you, you can safely ignore this email.");
-            html = html.replace("{{button_label}}", "Reset password");
+            html = html.replace("{{header}}", "Сыр сөздү жаңылоо");
+            html = html.replace("{{greeting}}", "Урматтуу " + user.getName() + ",");
+            html = html.replace("{{top}}", "Bilerman сыр сөзүңүздү унутуп койдуңуз окшойт. Эгер бул чын болсо, сыр сөзүңүздү жаңыдан баштоо үчүн төмөнкүнү басыңыз.");
+            html = html.replace("{{bottom}}", "Эгерде бул кат сизге адашып келген болсо, жөн эле өчүрүп салсаңыз болот");
+            html = html.replace("{{button_label}}", "Сыр сөздү жаңылоо");
+            html = html.replace("{{copyPasteLink}}", "Эгерде жогорудагы баскыч иштебей калса, анда төмөнкү шилтемени копиялап, браузериңизге коюп издеңиз");
             html = html.replace("{{action_url}}", resetURL);
             String message = html;
 
             MimeMessagePreparator messagePreparator = mimeMessage -> {
                 MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
                 messageHelper.setTo(user.getEmail());
-                messageHelper.setSubject("Bilerman password reset");
+                messageHelper.setSubject("Билерман сыр сөзүңүздү жаңылаңыз");
                 messageHelper.setText(message, true);
             };
             mailSender.send(messagePreparator);
