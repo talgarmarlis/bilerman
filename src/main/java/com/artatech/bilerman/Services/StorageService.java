@@ -1,26 +1,26 @@
 package com.artatech.bilerman.Services;
 
-import com.artatech.bilerman.Entities.Image;
 import com.artatech.bilerman.Exeptions.AppException;
 import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @Service
@@ -29,13 +29,15 @@ public class StorageService {
     @Value("${app.file.upload-dir}")
     private String dir;
 
-    public String store(MultipartFile file, String location) {
-        String fileName = UUID.randomUUID().toString() + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+    public String store(MultipartFile mFile, String location) {
+        String fileName = UUID.randomUUID().toString() + mFile.getOriginalFilename().substring(mFile.getOriginalFilename().lastIndexOf("."));
         try {
             // Copy file to the target location (Replacing existing file with the same name)
+            File imageSourceFile = asFile(mFile);
             Path filePath = getPath(location).resolve(fileName);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
+            File compressedImageFile = filePath.toFile();
+            new ImageCompressor(imageSourceFile).compressTo(compressedImageFile);
+            imageSourceFile.delete();
             return fileName;
         } catch (IOException ex) {
             throw new AppException("Could not store file " + fileName + ". Please try again!", ex);
@@ -45,11 +47,11 @@ public class StorageService {
     public String store(String url, String location) {
         String fileName = UUID.randomUUID().toString() + ".jpg";
         try {
-            // Copy file to the target location (Replacing existing file with the same name)
+            File imageSourceFile = asFile(url);
             Path filePath = getPath(location).resolve(fileName);
-            InputStream in = new URL(url).openStream();
-            Files.copy(in, filePath, StandardCopyOption.REPLACE_EXISTING);
-
+            File compressedImageFile = filePath.toFile();
+            new ImageCompressor(imageSourceFile).compressTo(compressedImageFile);
+            imageSourceFile.delete();
             return fileName;
         } catch (IOException ex) {
             throw new AppException("Could not store file " + fileName + ". Please try again!", ex);
@@ -87,5 +89,29 @@ public class StorageService {
         }
 
         return path;
+    }
+
+    private File asFile(MultipartFile multipartFile) throws IOException {
+        String tempFileName = UUID.randomUUID().toString();
+        File imageFile = Files.createTempFile(tempFileName, ".jpg").toFile();
+        multipartFile.transferTo(imageFile);
+        return imageFile;
+    }
+
+    private File asFile(String urlAsString) throws IOException {
+        URL url;
+        try {
+            url = new URL(urlAsString);
+            url.toURI();
+        } catch (MalformedURLException| URISyntaxException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        String tempFileName = UUID.randomUUID().toString();
+        File imageFile = Files.createTempFile(tempFileName, ".jpg").toFile();
+        FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
+        ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
+        fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+        return imageFile;
     }
 }
