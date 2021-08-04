@@ -18,9 +18,4 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     public Collection<Question> findAllByCreatedBy(Long userId);
 
     Page<TypePatternQuestions.Question> findAllByCreatedBy(Long userId, Pageable pageable);
-
-    @Query("SELECT a FROM Question a WHERE (:userId is null or a.createdBy = :userId) " +
-            "and (:title is null or lower(a.title) like concat('%', lower(:title), '%')) " +
-            "and (:tagName is null or (select count(*) from a.tags t where t.name like concat('%', lower(:tagName), '%')) > 0)")
-    Page<Question> findAllByIgnoringNulls(Long userId, String title, String tagName, Pageable pageable);
 }

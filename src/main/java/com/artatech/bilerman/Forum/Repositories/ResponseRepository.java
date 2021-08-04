@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ResponseRepository extends JpaRepository<Response, Long> {
-    //Page<Response> findAllResponseId(Long responseId, Pageable pageable);
-
+    //Page<Response> findAllQuestionId(Long responseId, Pageable pageable);
 }
