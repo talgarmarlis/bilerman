@@ -110,12 +110,18 @@ public class ArticleServiceImpl implements ArticleService {
             article.setBody(draft.getBody());
             if(article.getImageId() != draft.getImageId()) deleteImageId = article.getImageId();
             article.setImageId(draft.getImageId());
+            if(model.getCoverVisible() != null) article.setIsCoverVisible(model.getCoverVisible());
+            if(model.getPublic() != null) article.setIsPublic(model.getPublic());
+            if(model.getListed() != null) article.setIsListed(model.getListed());
         }
         else  {
             article = new Article(model.getTitle(), model.getSubtitle(), draft.getBody());
             article.setLanguageId(model.getLanguageId());
             article.setImageId(draft.getImageId());
             article.setDraft(draft);
+            if(model.getCoverVisible() != null) article.setIsCoverVisible(model.getCoverVisible());
+            if(model.getPublic() != null) article.setIsPublic(model.getPublic());
+            if(model.getListed() != null) article.setIsListed(model.getListed());
             draft.setArticle(article);
         }
 

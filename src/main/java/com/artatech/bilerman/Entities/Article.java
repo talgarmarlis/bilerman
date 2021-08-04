@@ -9,7 +9,6 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Entity
 public class Article extends CreateUserAudit {
 
@@ -33,6 +32,15 @@ public class Article extends CreateUserAudit {
     private Integer views;
 
     private String body;
+
+    @Column(name = "is_cover_visible")
+    private Boolean isCoverVisible = true;
+
+    @Column(name = "is_public")
+    private Boolean isPublic = true;
+
+    @Column(name = "is_listed")
+    private Boolean isListed = true;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, optional = false)
@@ -121,6 +129,30 @@ public class Article extends CreateUserAudit {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public Boolean getIsCoverVisible() {
+        return isCoverVisible;
+    }
+
+    public void setIsCoverVisible(Boolean coverVisible) {
+        isCoverVisible = coverVisible;
+    }
+
+    public Boolean getIsPublic() {
+        return isPublic;
+    }
+
+    public void setIsPublic(Boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public Boolean getIsListed() {
+        return isListed;
+    }
+
+    public void setIsListed(Boolean listed) {
+        isListed = listed;
     }
 
     public Draft getDraft() {

@@ -1,5 +1,7 @@
 package com.artatech.bilerman.Models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PublicationModel {
 
     private Long draftId;
@@ -11,6 +13,15 @@ public class PublicationModel {
     private Long languageId;
 
     private String[] tags;
+
+    @JsonProperty("isCoverVisible")
+    private Boolean isCoverVisible;
+
+    @JsonProperty("isPublic")
+    private Boolean isPublic;
+
+    @JsonProperty("isListed")
+    private Boolean isListed;
 
     public Long getDraftId() {
         return draftId;
@@ -50,5 +61,29 @@ public class PublicationModel {
 
     public void setTags(String[] tags) {
         this.tags = tags;
+    }
+
+    public Boolean getCoverVisible() {
+        return isCoverVisible;
+    }
+
+    public void setCoverVisible(Boolean coverVisible) {
+        isCoverVisible = coverVisible;
+    }
+
+    public Boolean getPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(Boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public Boolean getListed() {
+        return isListed;
+    }
+
+    public void setListed(Boolean listed) {
+        isListed = listed;
     }
 }
