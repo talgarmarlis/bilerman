@@ -4,6 +4,7 @@ import com.artatech.bilerman.Entities.Draft;
 import com.artatech.bilerman.Entities.Tag;
 import com.artatech.bilerman.Enums.ImageCategory;
 import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
+import com.artatech.bilerman.Models.ArticleModel;
 import com.artatech.bilerman.Models.PublicationModel;
 import com.artatech.bilerman.Repositories.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,11 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Collection<Question> findAll() {
         return questionRepository.findAll();
+    }
+
+    @Override
+    public Page<ArticleModel> findByPage(Long userId, String title, String orderBy, String direction, Integer page, Integer size) {
+        return null;
     }
 
     @Override

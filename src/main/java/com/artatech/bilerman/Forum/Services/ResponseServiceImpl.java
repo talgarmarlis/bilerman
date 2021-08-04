@@ -4,10 +4,12 @@ import com.artatech.bilerman.Entities.Comment;
 import com.artatech.bilerman.Entities.Reply;
 import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
 import com.artatech.bilerman.Forum.Repositories.ResponseRepository;
+import com.artatech.bilerman.Models.ArticleModel;
 import com.artatech.bilerman.Repositories.CommentRepository;
 import com.artatech.bilerman.Forum.Entities.Response;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -26,6 +28,7 @@ public class ResponseServiceImpl implements ResponseService {
     public Response findById(Long response_id) {
         return responseRepository.findById(response_id).orElseThrow(() -> new ResourceNotFoundException("Response", "response_id", response_id));
     }
+
 
     @Override
     public Response save(Response response) {

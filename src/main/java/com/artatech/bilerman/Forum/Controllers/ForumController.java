@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/forumes")
+@RequestMapping("/api/forums")
 public class ForumController {
 
     @Autowired
@@ -35,6 +35,15 @@ public class ForumController {
     @Autowired
     private UserService userService;
 
+    @GetMapping
+    public Page<ArticleModel> getQuestions(@RequestParam(value = "userId", required = false) Long userId,
+                                          @RequestParam(value = "title", required = false) String title,
+                                          @RequestParam(value = "orderBy", defaultValue = "createdAt", required = false) String orderBy,
+                                          @RequestParam(value = "direction", defaultValue = "DESC", required = false) String direction,
+                                          @RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
+                                          @RequestParam(value = "size", defaultValue = "10", required = false) Integer size){
+        return questionService.findByPage(userId, title, orderBy, direction, page, size);
+    }
 
 
     private Page toPage(List list, Pageable pageable) {
