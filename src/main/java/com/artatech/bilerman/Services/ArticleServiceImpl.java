@@ -32,23 +32,21 @@ public class ArticleServiceImpl implements ArticleService {
     TagService tagService;
 
     @Override
-    public Collection<Article> findAll() {
-        return articleRepository.findAll();
-    }
-
-    @Override
-    public Page<ArticleModel> findByPage(Long userId, String title, String orderBy, String direction, Integer page, Integer size) {
-        Page<Article> pagedArticles = findArticlesByPage(userId, title, orderBy, direction, page, size);
+    public Page<ArticleModel> findAll(String orderBy, String direction, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, direction.equals("DESC") ? Sort.by(orderBy).descending() : Sort.by(orderBy));
+        Page<Article> pagedArticles = articleRepository.findAllByIsListedTrueAndIsPublicTrue(pageable);
         Page<ArticleModel> pagedResult = pagedArticles.map(article -> {return new ArticleModel(article);});
         return pagedResult;
     }
 
-    private Page<Article> findArticlesByPage(Long userId, String title, String orderBy, String direction, Integer page, Integer size) {
+    @Override
+    public Page<ArticleModel> findAllByUser(Long userId, Long currentUserId, String orderBy, String direction, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size, direction.equals("DESC") ? Sort.by(orderBy).descending() : Sort.by(orderBy));
-        if(userId == null && title == null) return articleRepository.findAll(pageable);
-        else if(userId == null) return articleRepository.findAllByTitleContainingIgnoreCase(title, pageable);
-        else if(title == null) return articleRepository.findAllByCreatedBy(userId, pageable);
-        return articleRepository.findAllByCreatedByAndTitleContainingIgnoreCase(userId, title, pageable);
+        Page<Article> pagedArticles;
+        if(userId == currentUserId) pagedArticles = articleRepository.findAllByCreatedBy(userId, pageable);
+        else pagedArticles = articleRepository.findAllByCreatedByAndIsPublicTrue(userId, pageable);
+        Page<ArticleModel> pagedResult = pagedArticles.map(article -> {return new ArticleModel(article);});
+        return pagedResult;
     }
 
     @Override
@@ -56,7 +54,7 @@ public class ArticleServiceImpl implements ArticleService {
         Tag tag = tagService.findByName(tagName);
         if(tag == null) return Page.empty();
         Pageable pageable = PageRequest.of(page, size, direction.equals("DESC") ? Sort.by(orderBy).descending() : Sort.by(orderBy));
-        return articleRepository.findAllByTagsContaining(tag, pageable).map(article -> {return new ArticleModel(article);});
+        return articleRepository.findAllByTagsContainingAndIsListedTrueAndIsPublicTrue(tag, pageable).map(article -> {return new ArticleModel(article);});
     }
 
     @Override
@@ -90,11 +88,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void delete(Long id) {
         articleRepository.deleteById(id);
-    }
-
-    @Override
-    public Collection<Article> fingAllByUser(Long userId) {
-        return articleRepository.findAllByCreatedBy(userId);
     }
 
     @Override

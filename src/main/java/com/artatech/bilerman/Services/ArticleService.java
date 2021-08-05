@@ -17,9 +17,9 @@ import java.util.Optional;
 @Service
 public interface ArticleService {
 
-    Collection<Article> findAll();
+    Page<ArticleModel> findAll(String orderBy, String direction, Integer page, Integer size);
 
-    Page<ArticleModel> findByPage(Long userId, String title, String orderBy, String direction, Integer page, Integer size);
+    Page<ArticleModel> findAllByUser(Long userId, Long currentUserId, String orderBy, String direction, Integer page, Integer size);
 
     Page<ArticleModel> findByTagName(String tagName, String orderBy, String direction, Integer page, Integer size);
 
@@ -34,8 +34,6 @@ public interface ArticleService {
     void delete(Article article);
 
     void delete(Long id);
-
-    Collection<Article> fingAllByUser(Long userId);
 
     Article publishDraft(PublicationModel model);
 }

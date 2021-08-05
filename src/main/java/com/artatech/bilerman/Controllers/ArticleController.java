@@ -28,13 +28,21 @@ public class ArticleController {
     private UserService userService;
 
     @GetMapping
-    public Page<ArticleModel> getArticles(@RequestParam(value = "userId", required = false) Long userId,
-                                          @RequestParam(value = "title", required = false) String title,
+    public Page<ArticleModel> getArticles(@RequestParam(value = "orderBy", defaultValue = "createdAt", required = false) String orderBy,
+                                          @RequestParam(value = "direction", defaultValue = "DESC", required = false) String direction,
+                                          @RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
+                                          @RequestParam(value = "size", defaultValue = "10", required = false) Integer size){
+        return articleService.findAll(orderBy, direction, page, size);
+    }
+
+    @GetMapping("/users/{id}")
+    public Page<ArticleModel> getArticles(@PathVariable("id") Long userId, @CurrentUser UserPrincipal currentUser,
                                           @RequestParam(value = "orderBy", defaultValue = "createdAt", required = false) String orderBy,
                                           @RequestParam(value = "direction", defaultValue = "DESC", required = false) String direction,
                                           @RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
                                           @RequestParam(value = "size", defaultValue = "10", required = false) Integer size){
-        return articleService.findByPage(userId, title, orderBy, direction, page, size);
+        if(currentUser == null ) return articleService.findAllByUser(userId, null, orderBy, direction, page, size);
+        return articleService.findAllByUser(userId, currentUser.getId(), orderBy, direction, page, size);
     }
 
     @GetMapping("/tags")
