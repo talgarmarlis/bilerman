@@ -21,6 +21,8 @@ public class ArticleDetails extends CreateUserAudit {
 
     private Long imageId;
 
+    private Boolean isCoverVisible;
+
     private Integer views;
 
     private Integer comments;
@@ -40,6 +42,7 @@ public class ArticleDetails extends CreateUserAudit {
         this.subtitle = article.getSubtitle();
         this.body = article.getBody();
         this.imageId = article.getImageId();
+        this.isCoverVisible = article.getIsCoverVisible();
         this.views = article.getViews();
         this.comments = article.getComments().size();
         this.claps = article.getClaps().stream().collect(Collectors.summingInt(Clap::getCount));
@@ -95,6 +98,14 @@ public class ArticleDetails extends CreateUserAudit {
 
     public void setImageId(Long imageId) {
         this.imageId = imageId;
+    }
+
+    public Boolean getIsCoverVisible() {
+        return isCoverVisible;
+    }
+
+    public void setIsCoverVisible(Boolean coverVisible) {
+        isCoverVisible = coverVisible;
     }
 
     public Integer getViews() {

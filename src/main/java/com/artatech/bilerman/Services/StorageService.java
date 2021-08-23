@@ -2,6 +2,7 @@ package com.artatech.bilerman.Services;
 
 import com.artatech.bilerman.Exeptions.AppException;
 import com.artatech.bilerman.Exeptions.ResourceNotFoundException;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -10,9 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -21,6 +22,8 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Locale;
 import java.util.UUID;
 
 @Service
@@ -29,31 +32,51 @@ public class StorageService {
     @Value("${app.file.upload-dir}")
     private String dir;
 
+    private final int WIDTH = 800;
+
+    private final int MIN_SIZE = 100000;
+
     public String store(MultipartFile mFile, String location) {
-        String fileName = UUID.randomUUID().toString() + mFile.getOriginalFilename().substring(mFile.getOriginalFilename().lastIndexOf("."));
+        String imageformat = mFile.getOriginalFilename().substring(mFile.getOriginalFilename().lastIndexOf(".") + 1);
         try {
-            // Copy file to the target location (Replacing existing file with the same name)
             File imageSourceFile = asFile(mFile);
-            Path filePath = getPath(location).resolve(fileName);
-            File compressedImageFile = filePath.toFile();
-            new ImageCompressor(imageSourceFile).compressTo(compressedImageFile);
-            imageSourceFile.delete();
-            return fileName;
-        } catch (IOException ex) {
-            throw new AppException("Could not store file " + fileName + ". Please try again!", ex);
+            return storeFile(imageSourceFile, imageformat, location);
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+            throw new AppException("Could not store the file. Please try again!", ex);
         }
     }
 
     public String store(String url, String location) {
-        String fileName = UUID.randomUUID().toString() + ".jpg";
         try {
             File imageSourceFile = asFile(url);
-            Path filePath = getPath(location).resolve(fileName);
-            File compressedImageFile = filePath.toFile();
-            new ImageCompressor(imageSourceFile).compressTo(compressedImageFile);
-            imageSourceFile.delete();
+            return storeFile(imageSourceFile, "jpg", location);
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+            throw new AppException("Could not store the file. Please try again!", ex);
+        }
+
+    }
+
+    private String storeFile(File imageFile, String format, String location) {
+        String imageFormat = format.toLowerCase(Locale.ROOT);
+        String fileName = UUID.randomUUID() + "." + format.toLowerCase(Locale.ROOT);
+        Path filePath = getPath(location).resolve(fileName);
+        try {
+            System.out.println(imageFile.length());
+            if(imageFile.length() <= MIN_SIZE)
+                Files.copy(new FileInputStream(imageFile), filePath, StandardCopyOption.REPLACE_EXISTING);
+            else {
+                BufferedImage sourceImage = ImageIO.read(imageFile);
+                BufferedImage outputImage = resizeImage(sourceImage);
+                ImageIO.write(outputImage, imageFormat, new File(filePath.toString()));
+            }
+            imageFile.delete();
             return fileName;
         } catch (IOException ex) {
+            ex.printStackTrace();
             throw new AppException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
@@ -113,5 +136,9 @@ public class StorageService {
         ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
         fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
         return imageFile;
+    }
+
+    private BufferedImage resizeImage(BufferedImage originalImage) {
+        return Scalr.resize(originalImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, WIDTH, Scalr.OP_ANTIALIAS);
     }
 }
