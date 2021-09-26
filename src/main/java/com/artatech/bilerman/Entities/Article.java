@@ -48,7 +48,8 @@ public class Article extends CreateUserAudit {
     private Draft draft;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(name = "article_tag", joinColumns = { @JoinColumn(name = "article_id") }, inverseJoinColumns = { @JoinColumn(name = "tag_id") })
+    @JoinTable(name = "article_tag", joinColumns = { @JoinColumn(name = "article_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "tag_id") })
     private Set<Tag> tags = new HashSet<>();
 
     @JsonIgnore
@@ -64,10 +65,11 @@ public class Article extends CreateUserAudit {
     private Set<Comment> comments;
 
     @ManyToOne
-    @JoinColumn(name="createdBy", nullable=false, insertable = false, updatable = false)
+    @JoinColumn(name = "createdBy", nullable = false, insertable = false, updatable = false)
     private User user;
 
-    public Article() {}
+    public Article() {
+    }
 
     public Article(String title, String subtitle, String body) {
         this.title = title;

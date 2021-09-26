@@ -4,6 +4,7 @@ import com.artatech.bilerman.AccountManager.Security.CurrentUser;
 import com.artatech.bilerman.AccountManager.Security.UserPrincipal;
 import com.artatech.bilerman.AccountManager.Sevices.UserService;
 import com.artatech.bilerman.Entities.Article;
+import com.artatech.bilerman.Forum.Entities.Question;
 import com.artatech.bilerman.Forum.Services.QuestionService;
 import com.artatech.bilerman.Forum.Services.ResponseReplyService;
 import com.artatech.bilerman.Forum.Services.ResponseService;
@@ -43,6 +44,12 @@ public class ForumController {
                                           @RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
                                           @RequestParam(value = "size", defaultValue = "10", required = false) Integer size){
         return questionService.findByPage(userId, title, orderBy, direction, page, size);
+    }
+
+    @PostMapping("/publish")
+    @PreAuthorize("hasRole('USER')")
+    public Question save(@RequestBody Question question){
+        return questionService.save(question);
     }
 
 

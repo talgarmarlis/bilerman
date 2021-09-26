@@ -71,12 +71,12 @@ spring:
     platform: postgres
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password: root
+    password: 1234
   flyway:
     url: jdbc:postgresql://localhost:5432/
     schemas: bilerman
     user: postgres
-    password: root
+    password: 1234
 
 app:
   url: http://localhost:3000

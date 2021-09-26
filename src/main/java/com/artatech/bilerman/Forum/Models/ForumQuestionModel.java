@@ -1,49 +1,52 @@
-package com.artatech.bilerman.Forum.Entities;
+package com.artatech.bilerman.Forum.Models;
 
 import com.artatech.bilerman.AccountManager.Entities.User;
 import com.artatech.bilerman.AccountManager.Models.Audit.CreateUserAudit;
+import com.artatech.bilerman.Entities.Clap;
 import com.artatech.bilerman.Entities.Tag;
+import com.artatech.bilerman.Forum.Entities.Question;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
-public class Question extends CreateUserAudit {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "question_id", nullable = false, updatable = false)
+public class ForumQuestionModel extends CreateUserAudit {
+
     private Long id;
 
-    @Size(max = 500)
     private String title;
 
     private String description;
 
-    @Column(name = "language_id")
     private Long languageId;
 
     private Integer response_id;
 
-    @ManyToOne
-    @JoinColumn(name = "createdBy", nullable = false, insertable = false, updatable = false)
     private User user;
 
-    public Question() {
-    };
-
-    public Question(String title, String description) {
-        this.title = title;
-        this.description = description;
-    }
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(name = "question_tag", joinColumns = { @JoinColumn(name = "question_id") }, inverseJoinColumns = {
-            @JoinColumn(name = "tag_id") })
     private Set<Tag> tags = new HashSet<>();
 
     private Boolean is_anonymous;
+
+    public ForumQuestionModel() {
+    };
+
+    public ForumQuestionModel(Question question) {
+        this.title = question.getTitle();
+        this.description = question.getDescription();
+        this.id = question.getId();
+        this.user = question.getUser();
+        this.languageId = question.getLanguageId();
+        this.response_id = question.getResponseId();
+        this.tags = question.getTags();
+        this.is_anonymous = question.getIs_anonymous();
+        this.setCreatedAt(question.getCreatedAt());
+        this.setCreatedBy(question.getCreatedBy());
+    }
+
+
 
     public Long getId() {
         return id;
@@ -56,8 +59,6 @@ public class Question extends CreateUserAudit {
     public String getTitle() {
         return title;
     }
-
-    public User getUser(){return user;}
 
     public void setTitle(String title) {
         this.title = title;
@@ -77,14 +78,6 @@ public class Question extends CreateUserAudit {
 
     public void setIs_anonymous(Boolean is_anonymous) {
         this.is_anonymous = is_anonymous;
-    }
-
-    public Integer getResponseId(){
-        return response_id;
-    }
-
-    public void setResponseId(Integer responseId) {
-        this.response_id = responseId;
     }
 
     public Long getLanguageId() {
