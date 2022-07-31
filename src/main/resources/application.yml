@@ -66,17 +66,20 @@ logging:
 ---
 
 spring:
-  profiles: dev
+  config:
+    activate:
+      on-profile: dev
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5430/postgres
     username: postgres
-    password: 1234
+    password: root
   flyway:
-    url: jdbc:postgresql://localhost:5432/
+    url: jdbc:postgresql://localhost:5430/
     schemas: bilerman
     user: postgres
-    password: 1234
+    password: root
+    enabled: true
 
 app:
   url: http://localhost:3000
@@ -89,7 +92,9 @@ server:
 ---
 
 spring:
-  profiles: prod
+  config:
+    activate:
+      on-profile: prod
   datasource:
     platform: postgres
     url: jdbc:postgresql://localhost:5432/postgres

@@ -1,7 +1,6 @@
 package com.artatech.bilerman.Entities;
 
 import com.artatech.bilerman.AccountManager.Models.Audit.CreateDateAudit;
-import com.artatech.bilerman.Forum.Entities.Question;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -28,10 +27,6 @@ public class Tag extends CreateDateAudit {
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "tags")
     private Set<Article> articles = new HashSet<>();
-
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "tags")
-    private Set<Question> questions = new HashSet<>();
 
     public Tag() {
     }
@@ -72,11 +67,4 @@ public class Tag extends CreateDateAudit {
         this.articles = articles;
     }
 
-    public Set<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(Set<Question> questions) {
-        this.questions = questions;
-    }
 }
