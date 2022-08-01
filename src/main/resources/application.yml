@@ -97,11 +97,11 @@ spring:
       on-profile: prod
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://bilerman_db:5432/postgres
     username: postgres
     password: root
   flyway:
-    url: jdbc:postgresql://localhost:5432/
+    url: jdbc:postgresql://bilerman_db:5432/
     schemas: bilerman
     user: postgres
     password: root

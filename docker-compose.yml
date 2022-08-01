@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  app:
+    image: 'docker-spring-boot-postgres:latest'
+    build:
+      context: .
+    container_name: bilerman_app
+    depends_on:
+      - db
+
+  db:
+    image: 'postgres:14'
+    container_name: bilerman_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
