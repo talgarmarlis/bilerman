@@ -5,6 +5,8 @@ services:
     image: 'docker-spring-boot-postgres:latest'
     build:
       context: .
+    volumes:
+      - /root/bilerman_data/app/images:/app/images:rw
     container_name: bilerman_app
     ports:
       - "8888:8888"

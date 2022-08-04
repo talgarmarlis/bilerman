@@ -109,7 +109,7 @@ spring:
 app:
   url: https://bilerman.kg
   file:
-    upload-dir: /root/bilerman/resources/images
+    upload-dir: /app/images
 
 server:
   port: 8888
