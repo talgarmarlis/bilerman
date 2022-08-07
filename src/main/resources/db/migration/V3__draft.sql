@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS bilerman.draft
         CONSTRAINT draft_draft_id_pk
 			PRIMARY KEY,
 	title VARCHAR(500),
-	subtitle VARCHAR(500),
+	preview VARCHAR(500),
 	body TEXT,
 	published BOOLEAN NOT NULL DEFAULT FALSE,
 	article_id INTEGER REFERENCES bilerman.article(article_id),

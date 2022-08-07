@@ -23,6 +23,9 @@ public class Article extends CreateUserAudit {
     @Size(max = 500)
     private String subtitle;
 
+    @Size(max = 500)
+    private String preview;
+
     @Column(name = "image_id")
     private Long imageId;
 
@@ -32,9 +35,6 @@ public class Article extends CreateUserAudit {
     private Integer views;
 
     private String body;
-
-    @Column(name = "is_cover_visible")
-    private Boolean isCoverVisible = true;
 
     @Column(name = "is_public")
     private Boolean isPublic = true;
@@ -101,6 +101,14 @@ public class Article extends CreateUserAudit {
         this.subtitle = subtitle;
     }
 
+    public String getPreview() {
+        return preview;
+    }
+
+    public void setPreview(String preview) {
+        this.preview = subtitle;
+    }
+
     public Long getImageId() {
         return imageId;
     }
@@ -131,14 +139,6 @@ public class Article extends CreateUserAudit {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public Boolean getIsCoverVisible() {
-        return isCoverVisible;
-    }
-
-    public void setIsCoverVisible(Boolean coverVisible) {
-        isCoverVisible = coverVisible;
     }
 
     public Boolean getIsPublic() {

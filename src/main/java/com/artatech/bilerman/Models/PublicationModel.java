@@ -10,6 +10,8 @@ public class PublicationModel {
 
     private String subtitle;
 
+    private String preview;
+
     private Long languageId;
 
     private String[] tags;
@@ -45,6 +47,14 @@ public class PublicationModel {
 
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
+    }
+
+    public String getPreview() {
+        return preview;
+    }
+
+    public void setPreview(String preview) {
+        this.preview = preview;
     }
 
     public Long getLanguageId() {

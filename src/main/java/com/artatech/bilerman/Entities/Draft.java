@@ -18,7 +18,7 @@ public class Draft extends UserDateAudit {
     private String title;
 
     @Size(max = 500)
-    private String subtitle;
+    private String preview;
 
     private Boolean published;
 
@@ -49,12 +49,12 @@ public class Draft extends UserDateAudit {
         this.title = title;
     }
 
-    public String getSubtitle() {
-        return subtitle;
+    public String getPreview() {
+        return preview;
     }
 
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
+    public void setPreview(String preview) {
+        this.preview = preview;
     }
 
     public Boolean getPublished() {

@@ -15,6 +15,8 @@ public class ArticleModel extends CreateUserAudit {
 
     private String subtitle;
 
+    private String preview;
+
     private Long imageId;
 
     private Integer views;
@@ -32,6 +34,7 @@ public class ArticleModel extends CreateUserAudit {
         this.id = article.getId();
         this.title = article.getTitle();
         this.subtitle = article.getSubtitle();
+        this.preview = article.getPreview();
         this.imageId = article.getImageId();
         this.views = article.getViews();
         this.comments = article.getComments().size();

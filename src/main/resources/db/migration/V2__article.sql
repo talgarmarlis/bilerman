@@ -3,9 +3,9 @@ CREATE TABLE IF NOT EXISTS bilerman.article
     article_id SERIAL NOT NULL
         CONSTRAINT article_article_id_pk
 			PRIMARY KEY,
-	title VARCHAR(500),
+	title VARCHAR(500) NOT NULL,
 	subtitle VARCHAR(500),
-	description VARCHAR(500),
+	preview VARCHAR(500),
 	body TEXT,
 	published BOOLEAN NOT NULL DEFAULT FALSE,
 	views INTEGER NOT NULL DEFAULT 0,

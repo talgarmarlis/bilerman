@@ -17,6 +17,8 @@ public class ArticleDetails extends CreateUserAudit {
 
     private String subtitle;
 
+    private String preview;
+
     private String body;
 
     private Long imageId;
@@ -40,9 +42,9 @@ public class ArticleDetails extends CreateUserAudit {
         this.id = article.getId();
         this.title = article.getTitle();
         this.subtitle = article.getSubtitle();
+        this.preview = article.getPreview();
         this.body = article.getBody();
         this.imageId = article.getImageId();
-        this.isCoverVisible = article.getIsCoverVisible();
         this.views = article.getViews();
         this.comments = article.getComments().size();
         this.claps = article.getClaps().stream().collect(Collectors.summingInt(Clap::getCount));
