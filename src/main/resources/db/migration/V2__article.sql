@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS bilerman.article
 			PRIMARY KEY,
 	title VARCHAR(500) NOT NULL,
 	subtitle VARCHAR(500),
+	description VARCHAR(500),
 	preview VARCHAR(500),
 	body TEXT,
 	published BOOLEAN NOT NULL DEFAULT FALSE,
