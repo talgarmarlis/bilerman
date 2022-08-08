@@ -9,7 +9,7 @@ services:
       - /root/bilerman_data/app/images:/app/images:rw
     container_name: bilerman_app
     ports:
-      - "8888:443"
+      - "443:8888"
     depends_on:
       - db
 
