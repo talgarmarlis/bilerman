@@ -12,6 +12,7 @@ services:
       - "8443:8888"
     depends_on:
       - db
+    env_file: ~/bilerman_data/app/.env
     environment:
       - SPRING_MAIL_USERNAME="${SPRING_MAIL_USERNAME}"
       - SPRING_MAIL_PASSWORD="${SPRING_MAIL_PASSWORD}"
